@@ -1,3 +1,3 @@
 # QCHACKERS MONOREPOSITORY
 
-It is sometimes hard to keep track of the important information that is posted on the #qchackers clack channel. This is a repo that will contain everything related to qchackers; like projects, designs and learning material.
+It is sometimes hard to keep track of important information that is posted on the #qchackers slack channel. This repo that will contain everything related to qchackers; like projects, designs and learning material.
