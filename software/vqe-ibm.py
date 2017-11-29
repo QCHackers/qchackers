@@ -5,9 +5,6 @@
 '''
 This is used to map out the orbital, which is important because chemists can use it to predict reaction rate among other predictions
 '''
-
-
-
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import linalg as la
@@ -78,3 +75,11 @@ else:
                          initial_theta,SPSA_params,max_trials,save_step,1);
 
 
+plt.plot(np.arange(0, max_trials,save_step),output[2],label='E(theta_plus)')
+plt.plot(np.arange(0, max_trials,save_step),output[3],label='E(theta_minus)')
+plt.plot(np.arange(0, max_trials,save_step),np.ones(max_trials//save_step)*output[0],label='Final Energy')
+plt.plot(np.arange(0, max_trials,save_step),np.ones(max_trials//save_step)*exact,label='Exact Energy')
+plt.legend()
+plt.xlabel('Trial state')
+plt.ylabel('Energy')
+plt.show()
