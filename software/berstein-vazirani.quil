@@ -1,0 +1,26 @@
+H 0
+H 1
+H 2
+H 3
+X 0
+X 2
+X 3
+CZ 0 1
+CZ 2 3
+X 0
+X 2
+X 3
+H 0
+H 1
+H 2
+H 3
+CZ 0 1
+CZ 2 3
+H 0
+H 1
+H 2
+H 3
+MEASURE 0 [0]
+MEASURE 1 [1]
+MEASURE 2 [2]
+MEASURE 3 [3]
