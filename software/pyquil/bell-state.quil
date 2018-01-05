@@ -1,0 +1,3 @@
+H 0
+CNOT 0 1
+MEASURE 1 [1]
