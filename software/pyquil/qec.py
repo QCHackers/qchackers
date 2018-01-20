@@ -83,7 +83,7 @@ result = qvm.run_and_measure(bit_flip_paper, [3,4], 10)
 #print("Bit Flip Paper %s" % result)
 
 """
-https://en.wikipedia.org/wiki/Quantum_error_correction#The_Shor_code
+https://en.wikipedia.org/wiki/Quantum_error_correction
 """
 bit_flip_wiki = Program(    
    
@@ -96,7 +96,7 @@ bit_flip_wiki = Program(
 )
 
 result = qvm.run_and_measure(bit_flip_wiki, [0], 10)
-print("Bit Flip Wiki %s" % result)
+#print("Bit Flip Wiki %s" % result)
 
 
 """
@@ -139,6 +139,30 @@ phase_flip_paper = Program(
 result = qvm.run_and_measure(phase_flip_paper, [3,4], 10)
 #print("Phase Flip Paper %s" % result)
 
+
+"""
+https://en.wikipedia.org/wiki/Quantum_error_correction
+"""
+phase_flip_wiki = Program(    
+   
+    CNOT(0, 1),
+    CNOT(0, 2),
+    H(0),
+    H(1),
+    H(2),
+    Z(1),
+    Z(1),
+    Z(1),
+    H(0),
+    H(1),
+    H(2),
+    CNOT(0, 1),
+    CNOT(0, 2),
+    CCNOT(2, 1, 0),     
+)
+
+result = qvm.run_and_measure(phase_flip_wiki, [0], 10)
+print("Phase Flip Wiki %s" % result)
 
 """
 Can correct for bit flip errors and phase errors. Like a Y gate which is a bit flip and a phase flip.
