@@ -80,7 +80,23 @@ bit_flip_paper = Program(
 )
 
 result = qvm.run_and_measure(bit_flip_paper, [3,4], 10)
-print("Bit Flip Paper %s" % result)
+#print("Bit Flip Paper %s" % result)
+
+"""
+https://en.wikipedia.org/wiki/Quantum_error_correction#The_Shor_code
+"""
+bit_flip_wiki = Program(    
+   
+    CNOT(0, 1),
+    CNOT(0, 2),
+    X(0),
+    CNOT(0, 1),
+    CNOT(0, 2),
+    CCNOT(2, 1, 0),     
+)
+
+result = qvm.run_and_measure(bit_flip_wiki, [0], 10)
+print("Bit Flip Wiki %s" % result)
 
 
 """
@@ -92,7 +108,8 @@ This code is sensitive to bit flip errors
 
 """
 phase_flip = Program(    
-   
+
+    X(1),
     CNOT(0, 3),
     CNOT(1, 3),
     CNOT(1, 4),
@@ -106,7 +123,21 @@ phase_flip = Program(
 result = qvm.run_and_measure(qec, [3,4], 10)
 #print("Phase Flip %s" % result)
 
+phase_flip_paper = Program(    
+    CNOT(0, 1),
+    CNOT(1, 2),
+    X(2),
+    CNOT(0, 3),
+    CNOT(1, 3),
+    CNOT(0, 4),
+    CNOT(2, 4),
+    H(0),
+    H(1),
+    H(2),    
+)
 
+result = qvm.run_and_measure(phase_flip_paper, [3,4], 10)
+#print("Phase Flip Paper %s" % result)
 
 
 """
@@ -116,16 +147,20 @@ Can correct for bit flip errors and phase errors. Like a Y gate which is a bit f
 shor_code = Program(    
    
     CNOT(0, 3),
-    CNOT(1, 3),
-    CNOT(1, 4),
-    CNOT(2, 4),
+    CNOT(0, 6),
     H(0),
-    H(1),
-    H(2),
+    H(3),
+    H(6),
+    CNOT(0,1),
+    CNOT(3, 4),
+    CNOT(6, 7),
+    CNOT(0, 3),
+    CNOT(3,5),
+    CNOT(6,8),
 )   
 
 
-result = qvm.run_and_measure(qec, [3,4], 10)
+result = qvm.run_and_measure(shor_code, [9,10], 10)
 #print("Shor %s" % result)
 
 
