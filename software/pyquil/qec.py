@@ -248,9 +248,15 @@ Z and Y error: 011 First qubit is protected.
 
 Like the purely Phase flip code, the X gate acts as phase flip and Z acts as bit flip
 
+
+
+Phase flip measured by qubit 15 and 16:
+
+X: Passes for all bit flip tests
+Z: Passes for all phase flip tests
+Y: Passes for all Phase flip tests and bit flip!
 """
-shor_code_wiki = Program(
-    
+shor_code_wiki = Program(    
     CNOT(0, 3),
     CNOT(0, 6),
     H(0),
@@ -262,10 +268,29 @@ shor_code_wiki = Program(
     CNOT(0, 2),
     CNOT(3, 5),
     CNOT(6, 8),
-
-    #Error
-    Y(1),
     
+    #Error
+    Y(0),
+    
+    #Parity bit flip block 0: This works
+    CNOT(0, 9),
+    CNOT(1, 9),
+    CNOT(1, 10),
+    CNOT(2, 10),
+    
+    #Parity bit flip block 1
+    CNOT(3, 11),
+    CNOT(4, 11),
+    CNOT(4, 12),
+    CNOT(5, 12),
+    
+    #Parity bit flip block 2
+    CNOT(6, 13),
+    CNOT(7, 13),
+    CNOT(7, 14),
+    CNOT(8, 14),
+    
+    #Decoding and correcting
     CNOT(0, 1),
     CNOT(3, 4),
     CNOT(6, 7),
@@ -281,38 +306,15 @@ shor_code_wiki = Program(
     CNOT(0, 3),
     CNOT(0, 6),
     CCNOT(6, 3, 0),
-
-
-
-    #Parity bit flip block 0: This works
-    CNOT(0, 9),
-    CNOT(1, 9),
-    CNOT(1, 10),
-    CNOT(2, 10),
-
-
-    #Parity bit flip block 1
-    CNOT(3, 11),
-    CNOT(4, 11),
-    CNOT(4, 12),
-    CNOT(5, 12),
-
-
-     #Parity bit flip block 2
-    CNOT(6, 13),
-    CNOT(7, 13),
-    CNOT(7, 14),
-    CNOT(8, 14),
-
-
-    #Parity bit flip block 2
+    
+    #Parity bit Phase flip
     CNOT(0, 15),
     CNOT(3, 15),
     CNOT(3, 16),
-    CNOT(6, 16),
+    CNOT(6, 16),   
 )
 
-result = qvm.run_and_measure(shor_code_wiki, [15,16], 10)
+result = qvm.run_and_measure(shor_code_wiki, [9,10, 15,16], 5)
 print("Shor Code Wiki %s" % result)
 
 
