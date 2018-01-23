@@ -90,12 +90,21 @@ bit_flip_wiki = Program(
     CNOT(0, 1),
     CNOT(0, 2),
     X(0),
+
+     #Parity
+    CNOT(0, 3),
+    CNOT(1, 3),
+    CNOT(1, 4),
+    CNOT(2, 4),
+    
     CNOT(0, 1),
     CNOT(0, 2),
-    CCNOT(2, 1, 0),     
+    CCNOT(2, 1, 0),
+
+   
 )
 
-result = qvm.run_and_measure(bit_flip_wiki, [0], 10)
+result = qvm.run_and_measure(bit_flip_wiki, [3, 4], 10)
 #print("Bit Flip Wiki %s" % result)
 
 
@@ -162,7 +171,7 @@ phase_flip_wiki = Program(
 )
 
 result = qvm.run_and_measure(phase_flip_wiki, [0], 10)
-print("Phase Flip Wiki %s" % result)
+#print("Phase Flip Wiki %s" % result)
 
 """
 Can correct for bit flip errors and phase errors. Like a Y gate which is a bit flip and a phase flip.
@@ -175,17 +184,137 @@ shor_code = Program(
     H(0),
     H(3),
     H(6),
-    CNOT(0,1),
+    CNOT(0, 1),
     CNOT(3, 4),
     CNOT(6, 7),
     CNOT(0, 3),
-    CNOT(3,5),
-    CNOT(6,8),
+    CNOT(3, 5),
+    CNOT(6, 8),
+
+    
+
+    CNOT(0, 1),
+    CNOT(3, 4),
+    CNOT(6, 7),
+    CNOT(0, 2),
+    CNOT(3, 5),
+    CNOT(6, 8),
+    CCNOT(2, 1, 0),
+    CCNOT(5, 4, 2),
+    CCNOT(8, 7, 6),
+    H(0),
+    H(3),
+    H(6),
+    CNOT(0, 3),
+    CNOT(0, 6),
+    CCNOT(6, 3, 0),
+
+
+    #Parity bit flip block 0
+    CNOT(0, 9),
+    CNOT(1, 9),
+    CNOT(1, 10),
+    CNOT(2, 10),
+
+
+    #Parity bit flip block 1
+    CNOT(3, 11),
+    CNOT(4, 11),
+    CNOT(4, 12),
+    CNOT(5, 12),
+
+
+     #Parity bit flip block 2
+    CNOT(6, 13),
+    CNOT(7, 13),
+    CNOT(7, 14),
+    CNOT(8, 14),
+
+
+    #Parity bit flip block 2
+    CNOT(0, 15),
+    CNOT(3, 15),
+    CNOT(3, 16),
+    CNOT(6, 16),
 )   
 
 
 result = qvm.run_and_measure(shor_code, [9,10], 10)
 #print("Shor %s" % result)
+
+"""
+https://en.wikipedia.org/wiki/Quantum_error_correction
+Z and Y error: 011 First qubit is protected.
+
+Like the purely Phase flip code, the X gate acts as phase flip and Z acts as bit flip
+
+"""
+shor_code_wiki = Program(
+    
+    CNOT(0, 3),
+    CNOT(0, 6),
+    H(0),
+    H(3),
+    H(6),
+    CNOT(0, 1),
+    CNOT(3, 4),
+    CNOT(6, 7),
+    CNOT(0, 2),
+    CNOT(3, 5),
+    CNOT(6, 8),
+
+    #Error
+    Y(1),
+    
+    CNOT(0, 1),
+    CNOT(3, 4),
+    CNOT(6, 7),
+    CNOT(0, 2),
+    CNOT(3, 5),
+    CNOT(6, 8),
+    CCNOT(2, 1, 0),
+    CCNOT(5, 4, 2),
+    CCNOT(8, 7, 6),
+    H(0),
+    H(3),
+    H(6),
+    CNOT(0, 3),
+    CNOT(0, 6),
+    CCNOT(6, 3, 0),
+
+
+
+    #Parity bit flip block 0: This works
+    CNOT(0, 9),
+    CNOT(1, 9),
+    CNOT(1, 10),
+    CNOT(2, 10),
+
+
+    #Parity bit flip block 1
+    CNOT(3, 11),
+    CNOT(4, 11),
+    CNOT(4, 12),
+    CNOT(5, 12),
+
+
+     #Parity bit flip block 2
+    CNOT(6, 13),
+    CNOT(7, 13),
+    CNOT(7, 14),
+    CNOT(8, 14),
+
+
+    #Parity bit flip block 2
+    CNOT(0, 15),
+    CNOT(3, 15),
+    CNOT(3, 16),
+    CNOT(6, 16),
+)
+
+result = qvm.run_and_measure(shor_code_wiki, [15,16], 10)
+print("Shor Code Wiki %s" % result)
+
 
 
 
