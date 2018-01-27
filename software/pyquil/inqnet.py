@@ -5,7 +5,7 @@ from pyquil.gates import *
 
 qvm = QVMConnection()
 
-grover = Program(   
+inqnet = Program(   
     H(1),
     CNOT(0, 1),
     CNOT(1, 2),
@@ -14,9 +14,9 @@ grover = Program(
     CNOT(0, 1),
     CZ(2, 0),
     H(0),
-    H(0), 
+    H(0),
     
 )
 print("inqnet")
-result = qvm.run_and_measure(grover, [0, 1, 2], 5)
+result = qvm.run_and_measure(inqnet, [0, 1, 2], 5)
 print(result)
