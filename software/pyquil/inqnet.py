@@ -11,7 +11,7 @@ inqnet = Program(
     CNOT(1, 2),
     CNOT(0, 1),
     H(0),
-    CNOT(0, 1),
+    CNOT(1, 2),
     CZ(2, 0),
     H(0),
     H(0),
