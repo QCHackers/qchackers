@@ -199,7 +199,7 @@ def evaluate(compiler_function=None, test_circuits=None, verbose=False, backend 
                                                       config=config,
                                                       basis_gates=basis_gates,
                                                       shots=1,
-                                                      seed=None)
+                                                      seed=1)
 
         # Compute original cost and check original coupling map
         for circuit in qobj_original["circuits"]:
@@ -232,7 +232,7 @@ def evaluate(compiler_function=None, test_circuits=None, verbose=False, backend 
                                                       config=config,
                                                       basis_gates=basis_gates,
                                                       shots=1,
-                                                      seed=None)
+                                                      seed=1)
 
         # Compute compiled circuit cost and check coupling map
         for circuit in qobj_optimized["circuits"]:
@@ -266,7 +266,7 @@ def evaluate(compiler_function=None, test_circuits=None, verbose=False, backend 
                                                       config=config,
                                                       basis_gates=basis_gates,
                                                       shots=1,
-                                                      seed=None)
+                                                      seed=1)
 
             # Compute reference cost and check reference coupling map
             for circuit in qobj_reference["circuits"]:
@@ -512,7 +512,7 @@ def _compose_qobj(qobj_name, test_circuits,
                    basis_gates='u1,u2,u3,id,cx',
                    shots=1,
                    max_credits=3,
-                   seed=None):
+                   seed=1):
     qobj_out = {"id": qobj_name+"_test_circuits",
                      "config": config,
                      "circuits": []}

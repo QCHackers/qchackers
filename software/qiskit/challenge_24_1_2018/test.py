@@ -16,7 +16,7 @@ from challenge_evaluation import qasm_to_dag_circuit, load_coupling, get_layout
 qp = QuantumProgram()
 qp.set_api(Qconfig.APItoken, Qconfig.config['url'])
 pprint(qp.available_backends())
-backend = 'local_qiskit_simulator'
+backend = 'local_projectq_simulator'
 
 
 ex_nr = 1
@@ -25,10 +25,10 @@ test_circuit_filenames = {}
 
 for i in range(ex_nr):
     test_circuit_filenames['circuits/random8_n5_d5.qasm'] = get_layout(5)
-#for i in range(ex_nr):
-#    test_circuit_filenames['circuits/random9_n16_d16.qasm'] = get_layout(16)
-#for i in range(ex_nr):
-#    test_circuit_filenames['circuits/random9_n20_d20.qasm'] = get_layout(20)
+for i in range(ex_nr):
+    test_circuit_filenames['circuits/random9_n16_d16.qasm'] = get_layout(16)
+for i in range(ex_nr):
+    test_circuit_filenames['circuits/random9_n20_d20.qasm'] = get_layout(20)
 
     test_circuits = {}
 
