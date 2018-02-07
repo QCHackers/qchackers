@@ -1,0 +1,8 @@
+https://arxiv.org/abs/1710.01022
+Parameters
+
+1. Number of Physical qubits N
+2. Connectivity between qubits
+3. Number of tables that can be applied before errors or decoherence mask the result
+4. Available hardware set
+5. Number of operations that can be run in parallel
