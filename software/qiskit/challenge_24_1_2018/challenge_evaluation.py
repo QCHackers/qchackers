@@ -30,7 +30,7 @@ import copy
 import qiskit
 import sys, os, traceback
 
-GLOBAL_TIMEOUT = 3600
+GLOBAL_TIMEOUT = 7200
 ERROR_LIMIT = 1e-10
 from qiskit import QuantumProgram
 from qiskit.unroll import Unroller, DAGBackend

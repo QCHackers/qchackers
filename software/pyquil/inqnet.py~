@@ -1,0 +1,28 @@
+#https://www.reddit.com/r/QuantumComputing/comments/7tfl74/what_does_this_circuit_do/?st=jcxukv2c&sh=f19ff94e
+from pyquil.quil import Program
+from pyquil.api import QVMConnection
+from pyquil.gates import *
+from io import StringIO 
+
+qvm = QVMConnection()
+
+grover = Program(
+
+    DEFGATE CH(%theta):
+    1, 0, 0, 0
+    0, 1, 0, 0
+    0, 0, cos(2*%theta), sin(2*%theta)
+    0, 0, sin(2*%theta), cos(-2*%theta)
+    
+    H(1),
+    CNOT(0,1),
+    CNOT(1,2),
+    CNOT(0,1),
+    H(0),
+    CNOT(1,2),
+    
+    
+)
+print("inqnet")
+result = qvm.run_and_measure(grover, [0, 1, 2], 10)
+print(result)

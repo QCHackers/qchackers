@@ -1,0 +1,22 @@
+DEFGATE CH(%theta):
+    1, 0, 0, 0
+    0, 1, 0, 0
+    0, 0, cos(2*%theta), sin(2*%theta)
+    0, 0, sin(2*%theta), cos(-2*%theta)
+    
+H 3
+CNOT 3 2
+CNOT 2 1
+X 2
+H 3
+
+CH(pi/8) 1 0
+CH(pi/16) 2 0
+
+H 1
+H 2
+
+X 0            # Put qubit 0 back to |0>
+
+
+MEASURE 3 [3]  # If desired...

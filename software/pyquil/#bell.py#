@@ -1,0 +1,9 @@
+from pyquil.quil import Program
+from pyquil.api import QPUConnection
+from pyquil.gates import *
+from pyquil.api import QVMConnection
+#qpu = QPUConnection(device_name='19Q-Acorn')
+qvm = QVMConnection()
+bell_state = Program(H(0), CNOT(0, 1))
+result = qvm.run_and_measure(bell_state, [0, 1], 5)
+print(result)
