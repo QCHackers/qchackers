@@ -1,0 +1,5 @@
+Bell-state: Measurng q1 should be like the hadamard gate if it is entangled with q0
+
+
+
+Grover3.quil: 3

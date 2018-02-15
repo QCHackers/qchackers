@@ -1,0 +1,191 @@
+vtomole@vtomole:~/qc-hack-harvard$ python
+Python 2.7.12 (default, Nov 19 2016, 06:48:10) 
+[GCC 5.4.0 20160609] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import numpy as np
+>>> a = np.array([1.5, 0.5] [0.5, 1.5])
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: list indices must be integers, not tuple
+>>> a = np.array([1.5 0.5] [0.5 1.5])
+  File "<stdin>", line 1
+    a = np.array([1.5 0.5] [0.5 1.5])
+                        ^
+SyntaxError: invalid syntax
+>>> a = np.array([1.5 0.5], [0.5 1.5])
+  File "<stdin>", line 1
+    a = np.array([1.5 0.5], [0.5 1.5])
+                        ^
+SyntaxError: invalid syntax
+>>> a = np.array([1.5, 0.5] [0.5, 1.5])
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: list indices must be integers, not tuple
+>>> a = np.array([1 , 2] [3 , 4])
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: list indices must be integers, not tuple
+>>> a = np.array([[1.5, 0.5], [0.5, 1.5]])
+>>> LA.eigvals(a)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'LA' is not defined
+>>> from numpy import linalg as LA
+>>> LA.eigvals(a)
+array([ 2.,  1.])
+>>> x.getH()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'x' is not defined
+>>> a.getH()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'numpy.ndarray' object has no attribute 'getH'
+>>> np.transpose(a)
+array([[ 1.5,  0.5],
+       [ 0.5,  1.5]])
+>>> np.LA.inv(a)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'module' object has no attribute 'LA'
+>>> from numpy import linalg as LA
+>>> np.LA.inv(a)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'module' object has no attribute 'LA'
+>>> LA.inv(a)
+array([[ 0.75, -0.25],
+       [-0.25,  0.75]])
+>>> x = [[0,  1], [1,0]]
+>>> x
+[[0, 1], [1, 0]]
+>>> x = np.array ([[0,  1], [1,0]])
+>>> x
+array([[0, 1],
+       [1, 0]])
+>>> ground_state =np.array([[1] , [0]])
+>>> ground_state * x
+array([[0, 1],
+       [0, 0]])
+>>> ground_state =np.array([1, 0])
+>>> ground_state * x
+array([[0, 0],
+       [1, 0]])
+>>> x * ground_state
+array([[0, 0],
+       [1, 0]])
+>>> ground_state
+array([1, 0])
+>>> x
+array([[0, 1],
+       [1, 0]])
+>>> x * ground_state
+array([[0, 0],
+       [1, 0]])
+>>> x
+array([[0, 1],
+       [1, 0]])
+>>> ground_state
+array([1, 0])
+>>> ground_state =np.matrix([[1] , [0]])
+>>> x = np.matrix ([[0,  1], [1,0]])
+>>> x * ground_state
+matrix([[0],
+        [1]])
+>>> x
+matrix([[0, 1],
+        [1, 0]])
+>>> h = np.matrix ([[1/sqrt(2), 1/sqrt(2)], [1/sqrt(2), -1/sqrt(2)]])
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'sqrt' is not defined
+>>> sqrt(2)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'sqrt' is not defined
+>>> np.sqrt(2)
+1.4142135623730951
+>>> h = np.matrix ([[1/np.sqrt(2), 1/np.sqrt(2)], [1/np.sqrt(2), -1/np.sqrt(2)]])
+>>> h
+matrix([[ 0.70710678,  0.70710678],
+        [ 0.70710678, -0.70710678]])
+>>> ground_state
+matrix([[1],
+        [0]])
+>>> ground_state * h
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/vtomole/.local/lib/python2.7/site-packages/numpy/matrixlib/defmatrix.py", line 309, in __mul__
+    return N.dot(self, asmatrix(other))
+ValueError: shapes (2,1) and (2,2) not aligned: 1 (dim 1) != 2 (dim 0)
+>>> ground_state * x
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/vtomole/.local/lib/python2.7/site-packages/numpy/matrixlib/defmatrix.py", line 309, in __mul__
+    return N.dot(self, asmatrix(other))
+ValueError: shapes (2,1) and (2,2) not aligned: 1 (dim 1) != 2 (dim 0)
+>>> ground_state =np.matrix([[1] , [0]])
+>>> ground_state * x
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/vtomole/.local/lib/python2.7/site-packages/numpy/matrixlib/defmatrix.py", line 309, in __mul__
+    return N.dot(self, asmatrix(other))
+ValueError: shapes (2,1) and (2,2) not aligned: 1 (dim 1) != 2 (dim 0)
+>>> x
+matrix([[0, 1],
+        [1, 0]])
+>>> x = np.matrix ([[0,  1], [1,0]])
+>>> x
+matrix([[0, 1],
+        [1, 0]])
+>>> ground_state * x
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/vtomole/.local/lib/python2.7/site-packages/numpy/matrixlib/defmatrix.py", line 309, in __mul__
+    return N.dot(self, asmatrix(other))
+ValueError: shapes (2,1) and (2,2) not aligned: 1 (dim 1) != 2 (dim 0)
+>>> ground_state =np.matrix([[1] , [0]])
+>>> ground_state =np.matrix([[1] , [0]])
+>>> x = np.matrix ([[0,  1], [1,0]])
+>>> x * ground_state
+matrix([[0],
+        [1]])
+>>> h
+matrix([[ 0.70710678,  0.70710678],
+        [ 0.70710678, -0.70710678]])
+>>> h * ground_state
+matrix([[ 0.70710678],
+        [ 0.70710678]])
+>>> result = h * ground_state
+>>> result
+matrix([[ 0.70710678],
+        [ 0.70710678]])
+>>> x * result
+matrix([[ 0.70710678],
+        [ 0.70710678]])
+>>> ground_state =np.matrix([[0] , [1]])
+>>> x * ground_state
+matrix([[1],
+        [0]])
+>>> (x * ground_state) * h
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/vtomole/.local/lib/python2.7/site-packages/numpy/matrixlib/defmatrix.py", line 309, in __mul__
+    return N.dot(self, asmatrix(other))
+ValueError: shapes (2,1) and (2,2) not aligned: 1 (dim 1) != 2 (dim 0)
+>>> result = x * ground_state
+>>> result
+matrix([[1],
+        [0]])
+>>> h * result
+matrix([[ 0.70710678],
+        [ 0.70710678]])
+>>> excited_state
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'excited_state' is not defined
+>>> excited_state =np.matrix([[0] , [1]])
+>>> h * excited_state
+matrix([[ 0.70710678],
+        [-0.70710678]])
+>>> 

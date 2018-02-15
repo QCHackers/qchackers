@@ -1,0 +1,67 @@
+Ax = b: find x given A and b
+
+1. Phase estimation
+2. Controlled rotation
+3. Inverse phase estimation
+
+
+
+1. Phase estimation
+
+
+Prepares an eigenstate of the herimitian operator in one register and stores the corresponding eigenvalue in a second register.
+
+
+
+Phase estimation for a single-qubit Hamiltonian 0~ x acting on Q2. Q3 serves as a pointer system. The quantum Fourier transform on the pointer system in equivalent to the hadamard gate H on Q#. The discretized evolution of the system+pointer system is described by th
+
+
+The final measurement outcome on the pointer Q3 is 0 or 1 dependinig on whether Q2 is prepared in the +1 or -1 eigenstate of 0~x
+
+
+
+Controlled rotation R evolves the into a state
+
+The inverse phase estimation restores the register.
+
+The vector x, the solution of the system can be obtained by conditioning the solution of the system of linear equations
+
+
+
+H 3
+CNOT 3 2
+CNOT 2 1
+
+
+
+A = ([1.5, 0.5] [0.5, 1.5])
+eigenvalue(A) = lambda_1 = 2 and lambda_2 = 1
+
+1 and 2 can be stored with two qubits in registers.
+
+The phase estimation subroutine can be compiled into  two controlled-NOT (CNOT) gates, a swap gate, and three single qubit rotation gates
+
+|b>
+
+|b1> = 1/sqrt(2) * ([1], [1])
+
+|b2> = 1/sqrt(2) * ([1], [-1])
+
+|b3 = ([1], [0])
+
+The matrix A is choses such as its values 1 and 2 are encoded with two qubits in the registers
+
+
+
+Rotation subroutine
+
+1. Finding the recipricol
+
+
+
+
+
+
+The ancirllary bit is measured. When the outcome state is |1>, the algorithm is announced successful
+
+Quantum phase algorithm. Find the eigen vectors and eigen values of A

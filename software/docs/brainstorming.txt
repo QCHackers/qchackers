@@ -1,0 +1,64 @@
+1. Fourier transforms
+2. Finding eigen vectors and eigen values.
+3. HHL algorithm
+
+
+
+Bayesian inference
+
+Online perceptron
+
+Least fitting squares
+
+Classical boltzmann machine
+
+Quantum support vector machine.
+
+
+
+Principal component analysis:
+Data is represented in the form of vectos vj in a d-dimentional vector space where d = 2^n = N
+
+
+vj would be a vector of changes in prices of all stocks in the stock marcket from time tj to tj + 1
+
+
+vj = [-1, 2, 3,-5, -9, -2, 6]
+
+The covariance matrix summarizes the correlations between different components of the data.
+
+Principal component analysis operates by digonalizing the covariance matrix
+
+Each principal component represents an underlying common trend or form of correlation in the data.
+
+
+
+Quantum principal component analysis:
+
+Choose a data vector vj at random.
+
+Use qram to map that vector into a quantum state vj = |vj>
+
+The quantum state that summarizes the vector has log base 2 of D.
+
+And the operation of the qRAM requires O(d) operations divided by O(log d) steps that can be performed in parralel.
+
+ Because vj was chosen at random, The resulting quantum state has a density matrix p = (1/N)
+
+Repeatdly  sampling the data Using density matrix exponentiantion combined with the quantum phase estimation algorithm, qhich finds the eignevectors and eigen values of matrices.
+
+Supervised machine learning algorithms:
+
+Linear support vector machines and perceptrons
+
+Find an optimal separating hyperplane between two classes of data. in data
+
+
+Quantum support vector machines use the HLL algorithm which is phase estimation and matrix inversion.
+
+
+Quantize the the boltzman machine: Takes a neural network and express it as a set of interacting quantum spins, corresponding to a tunable ising model. By initializing the input neurons in the moltzmann machines into a fixed state and allowing the system to thermalize, we can read out the output qubits to obtain an answer.
+
+
+System given multiplpe copies of a system. PCA can be used to find it's eigenvalues and to reveal the 
+
