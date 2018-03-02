@@ -1,0 +1,6 @@
+X 0
+CNOT 0 1
+I 0
+X 0
+X 0
+MEASURE 0
