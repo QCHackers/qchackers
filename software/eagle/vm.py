@@ -4,11 +4,11 @@ import sys
 import random
 import cmath
 import itertools
-
 np.random.seed(int(time()))
-filepath =  sys.argv[1]
 
 class QuantumComputer:
+    qregister = []
+    cregister = [0,0,0,0,0]
     class Gates:
         #rotation
         def RX(theta):
@@ -34,30 +34,18 @@ class QuantumComputer:
         T = np.matrix([[1, 0], [0, cmath.exp(1j * np.pi / 4)]])
         CNOT = np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]])
 
-class Qubit:
-    "Define a qubit"
-
-    def __init__(self, address):
-        self.address = address
-        self.entangled = []
-        self.state = np.matrix([[1], [0]])
-        self.measurement = None 
+    class Qubit:
+        "Define a qubit"
         
-    def entangle(self, qubit):
-        self.entangled.append(qubit)
+        def __init__(self, address):
+            self.address = address
+            self.entangled = []
+            self.state = np.matrix([[1], [0]])
+            self.measurement = None 
         
-register = []
-cregister = [0,0,0,0,0]
-q0 = Qubit("0")
-q1 = Qubit("1")
-q2 = Qubit("2")
-q3 = Qubit("3")
-
-register.append(q0)
-register.append(q1)
-register.append(q2)
-register.append(q3)
-Gates = QuantumComputer.Gates()
+        def entangle(self, qubit):
+            self.entangled.append(qubit)
+        
 
 def H(qubit):
     state_length = len(qubit.state)
@@ -80,26 +68,41 @@ def H(qubit):
 
 def T(qubit):
     state_length = len(qubit.state)
-    gate = np.matrix([[1, 0], [0, 1]])
+    gate = Gates.T
+    qubit.entangle(qubit)
     
-    for x in range(0, int(np.sqrt(state_length))-1):
-        gate = np.kron(Gates.T, Gates.I)
-            
-    qubit.state = gate * qubit.state
+    if state_length != 2:        
+        for x in range(0, int(np.sqrt(state_length))-1):
+            gate = np.kron(gate, Gates.I)
+        state = gate * qubit.state
+    else:
+        state = Gates.T * qubit.state
 
-    print("T", state, "\n")
+    for x in qubit.entangled:
+        x.state = state
+
+    #print("H", state, "\n")
     
-    return qubit.state
+    return state
 
 def I(qubit):
     state_length = len(qubit.state)
-    gate = np.matrix([[1, 0], [0, 1]])
+    gate = Gates.I
+    qubit.entangle(qubit)
     
-    for x in range(0, int(np.sqrt(state_length))-1):
-        gate = np.kron(Gates.I, Gates.I)
-            
-    qubit.state = gate * qubit.state
-    return qubit.state
+    if state_length != 2:        
+        for x in range(0, int(np.sqrt(state_length))-1):
+            gate = np.kron(gate, Gates.I)
+        state = gate * qubit.state
+    else:
+        state = Gates.I * qubit.state
+
+    for x in qubit.entangled:
+        x.state = state
+
+    #print("H", state, "\n")
+    
+    return state
 
 def X(qubit):
     state_length = len(qubit.state)
@@ -121,29 +124,43 @@ def X(qubit):
     return state
 
 def Y(qubit):
-    gate_length = len(qubit.state)
-    gate = np.matrix([[1, 0], [0, 1]])
+    state_length = len(qubit.state)
+    gate = Gates.Y
+    qubit.entangle(qubit)
     
-    for x in range(0, int(np.sqrt(gate_length))-1):
-        gate = np.kron(Gates.Y, Gates.I)
-            
-    qubit.state = gate * qubit.state
+    if state_length != 2:        
+        for x in range(0, int(np.sqrt(state_length))-1):
+            gate = np.kron(gate, Gates.I)
+        state = gate * qubit.state
+    else:
+        state = Gates.Y * qubit.state
+
+    for x in qubit.entangled:
+        x.state = state
+
+    #print("H", state, "\n")
     
-    return qubit.state
+    return state
 
 def Z(qubit):
-    length = len(qubit.state)
-    gate = np.matrix([[1, 0], [0, 1]])
+    state_length = len(qubit.state)
+    gate = Gates.Z
+    qubit.entangle(qubit)
     
-    for x in range(0, int(np.sqrt(length))-1):
-        gate = np.kron(Gates.Z, Gates.I)
-            
-    qubit.state = gate * qubit.state
-    
-    return qubit.state
+    if state_length != 2:        
+        for x in range(0, int(np.sqrt(state_length))-1):
+            gate = np.kron(gate, Gates.I)
+        state = gate * qubit.state
+    else:
+        state = Gates.Z * qubit.state
 
-def get_addr(qubit):
-    return register[int(qubit)]
+    for x in qubit.entangled:
+        x.state = state
+
+    #print("H", state, "\n")
+    
+    return state
+
 
 def CNOT(qubit0, qubit1):
     gate = np.matrix([[1, 0], [0, 1]])
@@ -194,13 +211,26 @@ def MEASURE(qubit):
         if random.random() <= proba:
             
             for c in f:
-                cregister[j] = int(c)
+                QC.cregister[j] = int(c)
                 j = j + 1
+
+    print("MEASUREMENT of qubit", qubit.address, "is" , QC.cregister[int(qubit.address)], "\n")           
                 
-    return cregister[int(qubit.address)]
+    return QC.cregister[int(qubit.address)]
+
+def init():
+    q0 = QuantumComputer.Qubit("0")
+    q1 = QuantumComputer.Qubit("1")
+    q2 = QuantumComputer.Qubit("2")
+    q3 = QuantumComputer.Qubit("3")
+
+    QC.qregister.append(q0)
+    QC.qregister.append(q1)
+    QC.qregister.append(q2)
+    QC.qregister.append(q3)
+
     
-     
-def evaluate():
+def evaluate(filepath):
     
     with open(filepath) as fp:
         for line in fp:
@@ -214,44 +244,47 @@ def evaluate():
                  operator = args[0]
                  qubit = int(args[1])
                  qubit1 = int(args[2])
-                
+                 
                
             if(operator == "RX"):
-                RX(register[int(qubit)])
+                RX(QC.qregister[int(qubit)])
 
             elif(operator == "RY"):
-                RY(register[int(qubit)])
+                RY(QC.qregister[int(qubit)])
 
             elif(operator == "RZ"):
-                 RZ(register[int(qubit)])
+                 RZ(QC.qregister[int(qubit)])
 
             elif(operator == "I"):
-                 I(register[int(qubit)])
+                 I(QC.qregister[int(qubit)])
                 
             elif(operator == "X"):
-                X(register[int(qubit)])
+                X(QC.qregister[int(qubit)])
 
             elif (operator == "Y"):
-                Y(register[int(qubit)])
+                Y(QC.qregister[int(qubit)])
 
             elif (operator == "Z"):
-                Z(register[int(qubit)])
+                Z(QC.qregister[int(qubit)])
 
             elif (operator == "H"):
-                H(register[int(qubit)])
+                H(QC.qregister[int(qubit)])
                 
             elif (operator == "T"):
-                T(register[int(qubit)])
+                T(QC.qregister[int(qubit)])
                 
             elif (operator == "CNOT"):
-                CNOT(register[int(qubit)], register[int(qubit1)])
+                CNOT(QC.qregister[int(qubit)], QC.qregister[int(qubit1)])
                 
             elif (operator == "MEASURE"):
-                print("MEASUREMENT of qubit", qubit, "is" , MEASURE(register[int(qubit)]), "\n")           
+                 MEASURE(QC.qregister[int(qubit)])               
                 
             else:
                 print("Your operator does not exist")
 
 
 if __name__ == "__main__":
-    evaluate()    
+    QC = QuantumComputer()
+    Gates = QC.Gates()
+    init()
+    evaluate(sys.argv[1])    
