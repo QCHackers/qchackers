@@ -1,6 +1,10 @@
 X 0
 CNOT 0 1
 I 0
+I 0
 X 0
 X 0
+Y 0
+Z 0
+T 1
 MEASURE 0
