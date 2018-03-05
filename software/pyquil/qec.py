@@ -129,7 +129,7 @@ phase_flip = Program(
 )   
 
 
-result = qvm.run_and_measure(qec, [3,4], 10)
+#result = qvm.run_and_measure(qec, [3,4], 10)
 #print("Phase Flip %s" % result)
 
 phase_flip_paper = Program(    
@@ -315,7 +315,7 @@ shor_code_wiki = Program(
 )
 
 result = qvm.run_and_measure(shor_code_wiki, [9,10, 15,16], 5)
-print("Shor Code Wiki %s" % result)
+#print("Shor Code Wiki %s" % result)
 
 
 
@@ -343,6 +343,73 @@ z_correction = Program(
 
 result = qvm.run_and_measure(z_correction, [3,4], 10)
 #print("Shor %s" % result)
+
+
+steane_code = Program(    
+
+    H(6),
+    H(7),
+    H(8),
+    H(9),
+    H(10),
+    H(11),
+    H(12),
+    
+    CNOT(6, 0),
+    
+    CNOT(7, 1),
+    
+    CNOT(8, 2),
+    
+    CNOT(9, 2),
+    CNOT(9, 1),
+    
+    CNOT(10, 2),
+    CNOT(10, 0),
+
+    CNOT(11, 2),
+    CNOT(11, 1),
+    CNOT(11, 0),
+
+    CNOT(12, 1),
+    CNOT(12, 0),
+
+    H(6),
+    H(7),
+    H(8),
+    H(9),
+    H(10),
+    H(11),
+    H(12),
+
+    CNOT(6, 5),
+    CNOT(6, 3),
+
+    CNOT(7, 5),
+    CNOT(7, 4),
+
+
+    CNOT(8, 5),
+    CNOT(8, 4),
+    CNOT(8, 3),
+
+    CNOT(9, 3),
+
+    CNOT(10, 4),
+
+    CNOT(11, 5),
+
+
+    CNOT(12, 4),
+    CNOT(12, 3),
+
+    
+   
+)   
+
+
+result = qvm.run_and_measure(steane_code, [0,1,2,3,4,5], 1)
+print("Steane %s" % result)
 
 def damping_channel(damp_prob=.1):
     """
