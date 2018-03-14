@@ -14,6 +14,11 @@
   "pi about X axis followed by pi/2 about Y axis"
   `((RX pi ,x) (RY pi/2 ,x)))
 
+
+(defun comp-measure (x)
+  "Apply measurement to the wavefunction"
+  `((MEASURE ,x)))
+
 (defun gen (x file)
   "Writes the generated code to file"
   (let ((in file))
@@ -34,7 +39,8 @@
        (H (comp-h (cadr x)))
        (pi/8 (comp-y (cadr x)))
        (CNOT (comp-cnot (cdr x)))
-       (t "Doesnt exist")))
+       (MEASURE (comp-measure (cadr x)))
+       (t (error "GATE IS NOT IMPLEMENTED."))))
     
     (t  (comp (rest x)))))
 
@@ -44,12 +50,21 @@
       (CZ ,(car x) ,(cadr x))
       ,@(comp `(H ,(cadr x)))))
 
-(defun compiler (code output)
+(defun parse (instr)
+  "Parse Instruction into s-expression"
+  (loop for i in instr collect (cdr i)))
+
+
+(defun compiler (source destination)
   "Reads code file and compiles each expression into output file"
-  (let ((in (open code :if-does-not-exist nil)) (out (open output :if-does-not-exist :create :direction :output :if-exists :supersede)))
-    (when in
-      (loop for line = (read in nil)
-	   
-	 while line do (gen (comp line) out)))
-    (close in)
-    (close out)))
+  (let ((instr '()))
+    (with-open-file (in source :direction :input)
+      (with-open-file (out destination :direction :output :if-exists :supersede)
+	
+	(when in
+	  (loop for line = (read-line in nil)
+	       
+	     while line do (progn
+			     (setf instr (lex-line line))
+			     (setf instr (parse instr))
+			     (gen (comp instr) out))))))))

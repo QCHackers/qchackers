@@ -200,13 +200,13 @@ def evaluate(filepath):
             elif nArgs == 3:
                 operator = args[0]
 
-                 if operator == "CZ":
-                     qubit = int(args[1])
-                     qubit1 = int(args[2])
+                if operator == "CZ":
+                    qubit = int(args[1])
+                    qubit1 = int(args[2])
 
-                 else:
-                     angle = args[1]
-                     qubit = int(args[2])                   
+                else:
+                    angle = args[1]
+                    qubit = int(args[2])                   
                      
                
             if(operator == "RX"):
