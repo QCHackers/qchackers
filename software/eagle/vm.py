@@ -7,7 +7,6 @@ import itertools
 np.random.seed(int(time()))
 
 
-
 class QuantumComputer:
     qregister = []
     cregister = [0,0,0,0,0]
@@ -56,7 +55,6 @@ class QuantumComputer:
 
 def wavefunction (wvf):
     perm_list = ["".join(seq) for seq in itertools.product("01", repeat=int(np.sqrt(len(wvf))))]
-    #print(wvf[0,0])
     wvf_string = ""
     
     for x in range(0, len(perm_list)):
@@ -68,7 +66,6 @@ def wavefunction (wvf):
                 
                 
     return wvf_string
-
 
 
 def apply_gate(qubit, wvf, gate_str):
@@ -99,6 +96,7 @@ def apply_gate(qubit, wvf, gate_str):
     
     return wvf
 
+
 def apply_two_qubit_gate(qubit0, qubit1, wvf, gate_str):
 
     if gate_str == "CNOT":
@@ -118,12 +116,8 @@ def apply_two_qubit_gate(qubit0, qubit1, wvf, gate_str):
     return wvf
 
 
-
-def pr(qubit, wvf, basis):
-    
-    wvf_bra = wvf.getH()
+def proj(qubit,basis):
     addr = int(qubit.address)
-    wvf_len = len(wvf)
     
     if basis == 0:
         proj = np.outer(QC.ket_zero , QC.ket_zero)
@@ -137,9 +131,18 @@ def pr(qubit, wvf, basis):
         proj = np.kron(Gates.I, proj)
     else:
         raise Exeception ("Not implemented")
+
+    return proj
+    
+
+
+def pr(qubit, wvf, basis):
+    
+    wvf_bra = wvf.getH()
+    addr = int(qubit.address)
+    wvf_len = len(wvf)       
         
-        
-    ket = proj * wvf
+    ket = proj(qubit, basis) * wvf
     answer = wvf_bra * ket
 
     return answer[0,0]
@@ -147,7 +150,7 @@ def pr(qubit, wvf, basis):
 
 def MEASURE(qubit, wvf):
     
-    print("MEASURE", wavefunction(qubit.state), "\n")
+    print("MEASURE", wavefunction(wvf), "\n")
 
     pr_zero = pr(qubit, wvf, 0)
     pr_one = pr(qubit, wvf, 1)
@@ -157,14 +160,15 @@ def MEASURE(qubit, wvf):
 
     perm_list = ["".join(seq) for seq in itertools.product("01", repeat=int(np.sqrt(len(qubit.state))))]
     
-    if random.random() <= pr_zero: 
-        
+    if random.random() <= pr_zero:
+        wvf = (proj(qubit, 0) * wvf)/(np.sqrt(pr_zero))
         print("MEASUREMENT of qubit", qubit.address, "is" , 0, "\n")
     else:
-        print("MEASUREMENT of qubit", qubit.address, "is" , 1, "\n")
-        
+        wvf = (proj(qubit, 1) * wvf)/(np.sqrt(pr_one))
+        print("MEASUREMENT of qubit", qubit.address, "is" , 1, "\n")       
                 
-    return QC.cregister[int(qubit.address)]
+    return wvf
+
 
 def init():
     q0 = QuantumComputer.Qubit("0")
@@ -260,18 +264,18 @@ if __name__ == "__main__":
     wv= np.kron(state_zero, state_zero)
     
     wv = apply_gate(q0, wv, "H")
-    wv = apply_gate(q1, wv, "X")
-    wv = apply_gate(q1,wv, "H")
+    #wv = apply_gate(q1, wv, "X")
+    #wv = apply_gate(q1,wv, "H")
     
     #wv = apply_gate(q1, wv, "X")
-    #wv = apply_two_qubit_gate(q0,q1, wv, "CNOT")
-    wv = apply_gate(q1, wv, "X")
+    wv = apply_two_qubit_gate(q0,q1, wv, "CNOT")
+    #wv = apply_gate(q1, wv, "X")
 
     
-    wv = apply_gate(q0, wv, "H")
-    wv = apply_gate(q1,wv, "H")
-    MEASURE(q0, wv)
-    MEASURE(q1, wv)
+    #wv = apply_gate(q0, wv, "H")
+    #wv = apply_gate(q1,wv, "H")
+    wv = MEASURE(q0, wv)
+    wv = MEASURE(q1, wv)
     
 
     
