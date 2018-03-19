@@ -16,7 +16,7 @@ class QuantumComputer:
     ket_zero = np.matrix([[1], [0]])
     ket_one = np.matrix([[0], [1]])
     class Gates:
-              
+        
         #pauli
         I = np.matrix([[1, 0], [0, 1]])
         X = np.matrix([[0, 1], [1, 0]])
@@ -35,9 +35,9 @@ class QuantumComputer:
         REV_CNOT = np.matrix([[0, 1, 0, 0], [1, 0, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
 
         SWAP = np.matrix([[1, 0, 0, 0],
-                 [0, 0, 1, 0],
-                 [0, 1, 0, 0],
-                 [0, 0, 0, 1]])
+                          [0, 0, 1, 0],
+                          [0, 1, 0, 0],
+                          [0, 0, 0, 1]])
 
     class Qubit:
         "Define a qubit"
@@ -48,10 +48,10 @@ class QuantumComputer:
             self.state = np.matrix([[1], [0]])
             self.measurement = None
             self.counter = 0
-        
+            
         def entangle(self, qubit):
             self.entangled.append(qubit)
-        
+            
 
 
 def wavefunction (wvf):
@@ -65,7 +65,7 @@ def wavefunction (wvf):
                 wvf_string =  wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x] + ">" + " + "
             else:             
                 wvf_string =  wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x] + ">" 
-               
+                
                 
     return wvf_string
 
@@ -90,7 +90,7 @@ def apply_gate(qubit, wvf, gate_str):
         
     elif addr == 1:         
         gate = np.kron(Gates.I, base_gate)
-         
+        
     else:
         raise Exception ("Not implemented")
 
@@ -111,10 +111,10 @@ def apply_two_qubit_gate(qubit0, qubit1, wvf, gate_str):
 
     if addr0 == 0 and addr1 == 1:
         wvf = Gates.CNOT * wvf
-   
+        
 
     print("CNOT", wavefunction(wvf), "\n")
-        
+    
     return wvf
 
 
@@ -129,15 +129,14 @@ def pr(qubit, wvf, basis):
         proj = np.outer(QC.ket_zero , QC.ket_zero)
     else:
         proj = np.outer(QC.ket_one , QC.ket_one)
-
         
-    if wvf_len != 2 :
-        if addr == 0:
-            proj = np.kron(proj, Gates.I)
-        elif addr == 1:
-            proj = np.kron(Gates.I, proj)
-        else:
-            raise Exeception ("Not implemented")
+    
+    if addr == 0:
+        proj = np.kron(proj, Gates.I)
+    elif addr == 1:
+        proj = np.kron(Gates.I, proj)
+    else:
+        raise Exeception ("Not implemented")
         
         
     ket = proj * wvf
@@ -162,7 +161,7 @@ def MEASURE(qubit, wvf):
         
         print("MEASUREMENT of qubit", qubit.address, "is" , 0, "\n")
     else:
-         print("MEASUREMENT of qubit", qubit.address, "is" , 1, "\n")
+        print("MEASUREMENT of qubit", qubit.address, "is" , 1, "\n")
         
                 
     return QC.cregister[int(qubit.address)]
@@ -200,10 +199,10 @@ def evaluate(filepath):
                 operator = args[0]
                 qubit = int(args[1])
             elif nArgs == 3:
-                 operator = args[0]
-                 qubit = int(args[1])
-                 qubit1 = int(args[2])
-                 
+                operator = args[0]
+                qubit = int(args[1])
+                qubit1 = int(args[2])
+                
             if reset:
                 init()
             elif(operator == "RX"):
@@ -213,10 +212,10 @@ def evaluate(filepath):
                 RY(QC.qregister[int(qubit)])
 
             elif(operator == "RZ"):
-                 RZ(QC.qregister[int(qubit)])
+                RZ(QC.qregister[int(qubit)])
 
             elif(operator == "I"):
-                 I(QC.qregister[int(qubit)])
+                I(QC.qregister[int(qubit)])
                 
             elif(operator == "X"):
                 X(QC.qregister[int(qubit)])
@@ -257,14 +256,18 @@ if __name__ == "__main__":
     q2 = QuantumComputer.Qubit("2")
     q3 = QuantumComputer.Qubit("3")
     state_zero = np.matrix([[1], [0]])
-   
+    
     wv= np.kron(state_zero, state_zero)
     
     wv = apply_gate(q0, wv, "H")
     wv = apply_gate(q1, wv, "X")
     wv = apply_gate(q1,wv, "H")
+    
     #wv = apply_gate(q1, wv, "X")
-    wv = apply_two_qubit_gate(q0,q1, wv, "CNOT")
+    #wv = apply_two_qubit_gate(q0,q1, wv, "CNOT")
+    wv = apply_gate(q1, wv, "X")
+
+    
     wv = apply_gate(q0, wv, "H")
     wv = apply_gate(q1,wv, "H")
     MEASURE(q0, wv)
