@@ -14,8 +14,8 @@ class QuantumComputer:
     applied_gates = []
     ket_zero = np.matrix([[1], [0]])
     ket_one = np.matrix([[0], [1]])
-    class Gates:
-        
+    
+    class Gates:        
         #pauli
         I = np.matrix([[1, 0], [0, 1]])
         X = np.matrix([[0, 1], [1, 0]])
@@ -36,7 +36,6 @@ class QuantumComputer:
 
     class Qubit:
         "Define a qubit"
-        
         def __init__(self, address):
             self.address = address
             self.entangled = []
@@ -51,8 +50,7 @@ class QuantumComputer:
 def two_n_size(wvf):
     return  int(np.log(len(wvf))/np.log(2))
 
-def wavefunction (wvf):
-    
+def wavefunction(wvf):    
     perm_list = ["".join(seq) for seq in itertools.product("01", repeat=int(np.sqrt(len(wvf))))]
     wvf_string = ""    
     ap_gate_len = len(QC.applied_gates)
@@ -80,8 +78,7 @@ def i_gen(num):
     return gates
 
 
-def build_gate (addr, wvf_size, x, spacing_num):     
-    
+def build_gate(addr, wvf_size, x, spacing_num):    
     if spacing_num == wvf_size -2:
         gate = np.kron(x, i_gen(spacing_num))        
     elif spacing_num == 0:
@@ -94,7 +91,7 @@ def build_gate (addr, wvf_size, x, spacing_num):
         
     return gate
 
-def append_gate (qubit, qubit1):
+def append_gate(qubit, qubit1):
     if qubit.address not in QC.applied_gates:
         QC.applied_gates.append(qubit.address)
 
@@ -102,7 +99,7 @@ def append_gate (qubit, qubit1):
         QC.applied_gates.append(qubit1.address)
     
 
-def get_base_gate (gate_str):
+def get_base_gate(gate_str):
     if gate_str == "H":
         base_gate = Gates.H
     elif gate_str == "X":
@@ -118,7 +115,7 @@ def get_base_gate (gate_str):
     return base_gate
     
     
-def apply_gate (qubit, wvf, gate_str, qubit1 = "MISSING"):
+def apply_gate(qubit, wvf, gate_str, qubit1 = "MISSING"):
     addr = int(qubit.address)
     wvf_size = two_n_size(wvf)
     spacing_num = wvf_size - 2 - addr
@@ -144,7 +141,7 @@ def apply_gate (qubit, wvf, gate_str, qubit1 = "MISSING"):
     return wvf
 
 
-def proj (qubit,basis, wvf):
+def proj(qubit,basis, wvf):
     addr = int(qubit.address)
     wvf_size = two_n_size(wvf) - 1
     
@@ -166,18 +163,15 @@ def proj (qubit,basis, wvf):
     
 
 
-def pr (qubit, wvf, basis):
-    
+def pr(qubit, wvf, basis):    
     wvf_bra = wvf.getH()       
-    ket = proj(qubit, basis, wvf) * wvf
-    
+    ket = proj(qubit, basis, wvf) * wvf    
     answer = wvf_bra * ket
     
     return answer[0,0]
 
 
-def MEASURE (qubit, wvf):
-    
+def MEASURE(qubit, wvf):    
     print("MEASURE", wavefunction(wvf), "\n")
 
     pr_zero = pr(qubit, wvf, 0)
@@ -215,8 +209,7 @@ def init():
     QC.qregister[3].state =  np.matrix([[1], [0]])
 
     
-def evaluate (filepath):
-    
+def evaluate(filepath):    
     with open(filepath) as fp:
         for line in fp:
             args = line.split()
