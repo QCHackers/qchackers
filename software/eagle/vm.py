@@ -4,12 +4,14 @@ import sys
 import random
 import cmath
 import itertools
+import re
 np.random.seed(int(time()))
 
 
 class QuantumComputer:
     qregister = []
     cregister = [0,0,0,0,0]
+    applied_gates = []
     comp_list = []
     counter = 0
     ket_zero = np.matrix([[1], [0]])
@@ -27,11 +29,7 @@ class QuantumComputer:
         T = np.matrix([[1, 0], [0, cmath.exp(1j * np.pi / 4)]])
         S = np.matrix([[1.0, 0.0], [0.0, 1.0j]])
         CNOT = np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]])
-
-        CNOT_H = np.matrix([[1, 0, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0]])
-
         CZ = np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, -1, 0]])
-        REV_CNOT = np.matrix([[0, 1, 0, 0], [1, 0, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
 
         SWAP = np.matrix([[1, 0, 0, 0],
                           [0, 0, 1, 0],
@@ -52,25 +50,43 @@ class QuantumComputer:
             self.entangled.append(qubit)
             
 
+def two_n_size(wvf):
+    return  int(np.log(len(wvf))/np.log(2))
+
 
 def wavefunction (wvf):
+    
     perm_list = ["".join(seq) for seq in itertools.product("01", repeat=int(np.sqrt(len(wvf))))]
-    wvf_string = ""
+    wvf_string = ""    
+    ap_gate_len = len(QC.applied_gates)
     
     for x in range(0, len(perm_list)):
         if wvf[x,0] != 0:
             if x != len(perm_list)-1 and len(wvf) != 2:               
-                wvf_string =  wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x] + ">" + " + "
+                wvf_string =  wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x][:ap_gate_len] + ">" + " + "             
             else:             
-                wvf_string =  wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x] + ">" 
+                wvf_string =  wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x] + ">"
                 
+    wvf_string = re.split(r'(\s+)', wvf_string)[:-3]
+    wvf_string = "".join(wvf_string)               
                 
     return wvf_string
 
 
+def i_gen(num):
+    gates = Gates.I
+
+    if num != 0:
+        for x in range(1, num):
+            gates = np.kron(Gates.I, gates)
+
+    return gates
+
+    
 def apply_gate(qubit, wvf, gate_str):
     addr = int(qubit.address)
-    
+    wvf_size = two_n_size(wvf)
+            
     if gate_str == "H":
         base_gate = Gates.H
     elif gate_str == "X":
@@ -80,20 +96,31 @@ def apply_gate(qubit, wvf, gate_str):
     elif gate_str == "Z":
         base_gate = Gates.Z
     else:
-        raise Exception("Gate not implemented")    
+        raise Exception("Gate not implemented")
 
-    if addr == 0:
-        gate = np.kron(base_gate, Gates.I)        
-        
-    elif addr == 1:         
-        gate = np.kron(Gates.I, base_gate)
-        
-    else:
-        raise Exception ("Not implemented")
-
-    wvf = gate * wvf 
-    print(gate_str, wavefunction(wvf), "\n")
+    x = np.kron(base_gate, Gates.I)
+    x_last = np.kron(Gates.I, base_gate)
+    spacing_num = wvf_size-2 - addr
     
+    if spacing_num == wvf_size -2:
+        gate = np.kron(x, i_gen(spacing_num))
+        
+    elif spacing_num == 0:
+         gate = np.kron(i_gen(addr), x)
+          
+    elif spacing_num == -1:
+        gate = np.kron(i_gen(addr-1), x_last)
+    else:       
+        gate = np.kron(i_gen(addr), x)
+        gate = np.kron(gate, i_gen(spacing_num))
+
+        
+    wvf = gate * wvf
+
+    if qubit.address not in QC.applied_gates:
+        QC.applied_gates.append(qubit.address)
+        
+    print(gate_str, wavefunction(wvf), "\n")
     return wvf
 
 
@@ -109,10 +136,9 @@ def apply_two_qubit_gate(qubit0, qubit1, wvf, gate_str):
 
     if addr0 == 0 and addr1 == 1:
         wvf = Gates.CNOT * wvf
-        
 
     print("CNOT", wavefunction(wvf), "\n")
-    
+
     return wvf
 
 
@@ -262,20 +288,23 @@ if __name__ == "__main__":
     state_zero = np.matrix([[1], [0]])
     
     wv= np.kron(state_zero, state_zero)
+    wv = np.kron (wv, state_zero)
+    wv = np.kron (wv, state_zero)
+
     
     wv = apply_gate(q0, wv, "H")
-    #wv = apply_gate(q1, wv, "X")
-    #wv = apply_gate(q1,wv, "H")
+    wv = apply_gate(q1, wv, "X")
+    wv = apply_gate(q1,wv, "H")
     
-    #wv = apply_gate(q1, wv, "X")
-    wv = apply_two_qubit_gate(q0,q1, wv, "CNOT")
+    wv = apply_gate(q1, wv, "X")
+    #wv = apply_two_qubit_gate(q0,q1, wv, "CNOT")
     #wv = apply_gate(q1, wv, "X")
 
     
     #wv = apply_gate(q0, wv, "H")
     #wv = apply_gate(q1,wv, "H")
-    wv = MEASURE(q0, wv)
-    wv = MEASURE(q1, wv)
+    #wv = MEASURE(q0, wv)
+    #wv = MEASURE(q1, wv)
     
 
     
