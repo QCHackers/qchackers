@@ -13,7 +13,8 @@ class Qubit:
         self.address = address
         self.measurement = None
 
-class Gates:        
+class Gates:
+    "Contains basic quantum gates"
     #pauli
     I = np.matrix([[1, 0], [0, 1]])
     X = np.matrix([[0, 1], [1, 0]])
@@ -34,6 +35,7 @@ class Gates:
                       [0, 0, 0, 1]]) 
 
 class QuantumComputer:
+    "Defines a quantum computer. Contains a wavefunction, quantum register, and classical register"
     qregister = []
     cregister = [0,0,0,0,0]
     qregister = []
@@ -53,9 +55,11 @@ class QuantumComputer:
             
 
 def two_n_size(wvf):
+    "wvf = 2^n. Solve for n"
     return  int(np.log(len(wvf))/np.log(2))
 
-def wavefunction(wvf):    
+def wavefunction(wvf):
+    "Prints the wavefunction in dirac notation"
     perm_list = ["".join(seq) for seq in itertools.product("01", repeat=int(np.sqrt(len(wvf))))]
     wvf_string = ""    
     ap_gate_len = len(QC.applied_gates)
@@ -74,6 +78,7 @@ def wavefunction(wvf):
 
 
 def i_gen(num):
+    "Generates the tensor product of num identity gates"
     gates = Gates.I
 
     if num != 0:
@@ -83,7 +88,8 @@ def i_gen(num):
     return gates
 
 
-def build_gate(addr, wvf_size, x, spacing_num):    
+def build_gate(addr, wvf_size, x, spacing_num):
+    "Generates the tensor product of quantum gate and spacing_num identity gates"
     if spacing_num == wvf_size -2:
         gate = np.kron(x, i_gen(spacing_num))        
     elif spacing_num == 0:
@@ -97,6 +103,7 @@ def build_gate(addr, wvf_size, x, spacing_num):
     return gate
 
 def append_gate(qubit, qubit1):
+    "Adds gate to apply_gates list to help with printing the wavefunction"
     if qubit.address not in QC.applied_gates:
         QC.applied_gates.append(qubit.address)
 
@@ -105,6 +112,7 @@ def append_gate(qubit, qubit1):
     
 
 def get_base_gate(gate_str):
+    "Returns the gate that was applied"
     if gate_str == "H":
         base_gate = Gates.H
     elif gate_str == "X":
@@ -121,6 +129,7 @@ def get_base_gate(gate_str):
     
     
 def apply_gate(qubit, wvf, gate_str, qubit1 = "MISSING"):
+    "Performs quantum gate operation on the wavefunction"
     addr = int(qubit.address)
     wvf_size = two_n_size(wvf)
     spacing_num = wvf_size - 2 - addr
@@ -147,6 +156,9 @@ def apply_gate(qubit, wvf, gate_str, qubit1 = "MISSING"):
 
 
 def proj(qubit,basis, wvf):
+    "Computes the projector ono the wavefunction
+    P_(w_i) = |w_i><w_i|"
+    
     addr = int(qubit.address)
     wvf_size = two_n_size(wvf) - 1
     
@@ -168,7 +180,10 @@ def proj(qubit,basis, wvf):
     
 
 
-def pr(qubit, wvf, basis):    
+def pr(qubit, wvf, basis):
+    "Computes probability of getting an outcome
+    Pr(|w_i>) = <v|Pw_i|v>"
+    
     wvf_bra = wvf.getH()       
     ket = proj(qubit, basis, wvf) * wvf    
     answer = wvf_bra * ket
@@ -177,6 +192,9 @@ def pr(qubit, wvf, basis):
 
 
 def MEASURE(qubit, wvf):
+    "Performs a measurement on the qubit and modifies the wavefunction
+    |new wvf> = P_(w_i)|v/sqrt(Pr(|w_i>)
+"
     addr = qubit.address
     pr_zero = pr(qubit, wvf, 0)
     pr_one = pr(qubit, wvf, 1)
@@ -199,6 +217,8 @@ def MEASURE(qubit, wvf):
 
 
 def evaluate(filepath):
+    "Executes program in file"
+    
     global wv
     
     with open(filepath) as fp:
