@@ -1,0 +1,9 @@
+X 2
+H 1
+H 2
+CNOT 1 2
+X 2
+H 1
+H 2
+MEASURE 1
+MEASURE 2
