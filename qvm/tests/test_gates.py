@@ -37,11 +37,13 @@ def test_base_gate_matrices():
 
 
 def test_rot_gate_matrices():
-    rx = Gates.RX(np.pi / 4)
-    assert np.isclose(rx, (np.cos(np.pi / 8) * np.eye(2)) - (1j * sin(np.pi / 8) * np.matrix([[0, 1], [1, 0]]))).all()
+    g = Gates()
+    
+    rx = g.RX(np.pi / 4)
+    assert np.isclose(rx, (np.cos(np.pi / 8) * np.eye(2)) - (1j * np.sin(np.pi / 8) * np.matrix([[0, 1], [1, 0]]))).all()
 
-    ry = Gates.RY(np.pi / 4)
-    assert np.isclose(ry, (np.cos(np.pi / 8) * np.eye(2)) - (1j * sin(np.pi / 8) * np.matrix([[0, -1j], [1j, 0]]))).all()
+    ry = g.RY(np.pi / 4)
+    assert np.isclose(ry, (np.cos(np.pi / 8) * np.eye(2)) - (1j * np.sin(np.pi / 8) * np.matrix([[0, -1j], [1j, 0]]))).all()
 
-    rz = Gates.RZ(np.pi / 4)
-    assert np.isclose(rz, (np.cos(np.pi / 8) * np.eye(2)) - (1j * sin(np.pi / 8) * np.matrix([[1, 0], [0, -1]]))).all()
+    rz = g.RZ(np.pi / 4)
+    assert np.isclose(rz, (np.cos(np.pi / 8) * np.eye(2)) - (1j * np.sin(np.pi / 8) * np.matrix([[1, 0], [0, -1]]))).all()
