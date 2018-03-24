@@ -9,7 +9,8 @@ def run(instructions):
     Program(instructions)
 
 if __name__ == "__main__":
-    p = """H 0
+    p = """QUBITS 2
+    H 0
     CNOT 0 1
     MEASURE 1
     MEASURE 0"""

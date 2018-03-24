@@ -39,22 +39,6 @@ def i_gen(num):
             gates = np.kron(Gates.I, gates)
     return gates
 
-def build_gate(addr, wvf_size, x, spacing_num):
-    #26print(f"==== {addr} \n {wvf_size} \n {x} \n {spacing_num}")
-    "Generates the tensor product of quantum gate and spacing_num identity gates"
-
-    if spacing_num == wvf_size - 1:
-        gate = np.kron(x, i_gen(spacing_num))
-    elif spacing_num == 0:
-        gate = np.kron(i_gen(addr), x)
-    elif spacing_num == -1:
-        gate = x
-    else:
-        gate = np.kron(i_gen(addr), x)
-        gate = np.kron(gate, i_gen(spacing_num))
-
-    return gate
-
 def append_gate(qubit, qubit1, QC):
     "Adds gate to apply_gates list to help with printing the wavefunction"
     if qubit.address not in QC.applied_gates:
@@ -66,20 +50,27 @@ def append_gate(qubit, qubit1, QC):
 
 def get_base_gate(gate_str, Gates):
     "Returns the gate that was applied"
-    if gate_str == "H":
-        base_gate = Gates.H
-    elif gate_str == "X":
-        base_gate = Gates.X
-    elif gate_str == "S":
-        base_gate = Gates.S
-    elif gate_str == "Z":
-        base_gate = Gates.Z
-    elif gate_str == "CNOT":
-         base_gate = Gates.CNOT
+
+    if gate_str in Gates.gates_set:
+        return Gates.gates_set[gate_str]
     else:
         raise Exception("Gate not implemented")
-    return base_gate
 
+def build_gate(addr, wvf_size, x, spacing_num):
+    #print(f"==== {addr} \n {wvf_size} \n {x} \n {spacing_num}")
+    "Generates the tensor product of quantum gate and spacing_num identity gates"
+
+    gate = x
+    if addr == 0:
+        if spacing_num > 0:
+            gate = np.kron(gate, i_gen(spacing_num))
+    else:
+        if spacing_num > 0:
+            gate = np.kron(gate, i_gen(spacing_num))
+        if wvf_size - spacing_num > 0:
+            gate = np.kron(i_gen(addr), gate)
+
+    return gate
 
 def apply_gate(qubit, wvf, gate_str, Gates, QC, qubit1 = None):
     "Performs quantum gate operation on the wavefunction"
@@ -89,7 +80,6 @@ def apply_gate(qubit, wvf, gate_str, Gates, QC, qubit1 = None):
     # space 0 = Command
 
     # number of qubit spaces prior to the target qubit
-    # @TODO this needs to be dynamic
     num_qubits_after = wvf_size - addr - 1
 
     # Grab matrix of the gate thats passed in
@@ -98,10 +88,11 @@ def apply_gate(qubit, wvf, gate_str, Gates, QC, qubit1 = None):
     x = base_gate
 
     if not qubit1 is None:
-        num_qubits_after -= 2
+        num_qubits_after -= 1
 
     # Build the base gate for the appropriate number of qubits
     # @TODO This doesn't work for 2 qubit gates with non-consecutive
+
     gate = build_gate(addr, wvf_size, x, num_qubits_after)
     append_gate(qubit, qubit1, QC)
 
@@ -140,7 +131,6 @@ def pr(qubit, wvf, basis, QC):
 
     return answer[0,0]
 
-
 def MEASURE(qubit, wvf, QC):
     "Performs a measurement on the qubit and modifies the wavefunction: |new wvf> = P_(w_i)|v/sqrt(Pr(|w_i>) "
 
@@ -162,34 +152,45 @@ def MEASURE(qubit, wvf, QC):
         wvf = (proj(qubit, 1, wvf, QC) * wvf)/(np.sqrt(pr_one))
         qubit.measurement = 1
         print(f"MEASUREMENT of qubit {addr} is 1")
-        print(wavefunction(wvf, QC))
+        print(f"{wavefunction(wvf, QC)}\n"),
 
     return wvf
 
-
 def evaluate(program, option):
     "Executes program in file"
-
     global Gates
     global QuantumComputer
-
-    #@TODO Dynamic sizing based on instructions
-    QC = QuantumComputer(2)
-    Gates = Gates()
     global wv
-    wv = QC.wvf
+
     if option == "string":
         print("It's a string")
         fp = program.splitlines()
+        args = fp[0].split()
+
     else:
         print("It's a file")
         fp = open(program)
+        args = fp.readline().split()
 
-    for line in fp:
+    if args[0] != 'QUBITS':
+        raise ValueError('Program must start with QUBITS {num_qubits}')
+    else:
+        num_qubits = int(args[1])
+        if not num_qubits > 0:
+            raise ValueError('Number of qubits must be an integer > 0')
+
+    QC = QuantumComputer(int(num_qubits))
+    Gates = Gates()
+    wv = QC.wvf
+
+    for (index, line) in enumerate(fp):
+        # Index 0 should the QUBITS instruction determined above
+        if index == 0:
+            continue
+
         args = line.split()
         nArgs = len(args)
         operator = args[0]
-
         if nArgs == 2:
             qubit = int(args[1])
             if (operator == "MEASURE"):

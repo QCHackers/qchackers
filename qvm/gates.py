@@ -1,6 +1,8 @@
 import numpy as np
+
 class Gates:
     "Contains basic quantum gates"
+
     def round(self, x):
         return np.around(x, decimals = 10)
 
@@ -41,3 +43,19 @@ class Gates:
                       [0, 0, 1, 0],
                       [0, 1, 0, 0],
                       [0, 0, 0, 1]])
+
+    gates_set = {
+        "I" : I,
+        "X" : X,
+        "Y" : Y,
+        "Z" : Z,
+        "H" : H,
+        "T" : T,
+        "S" : S,
+        "CNOT" : CNOT,
+        "CZ" : CZ,
+        "SWAP" : SWAP,
+        "RX" : RX,
+        "RY" : RY,
+        "RZ" : RZ
+    }
