@@ -1,5 +1,5 @@
 import numpy as np
-from qubit import Qubit
+from .qubit import Qubit
 
 class QuantumComputer:
     "Defines a quantum computer. Contains a wavefunction, quantum register, and classical register"

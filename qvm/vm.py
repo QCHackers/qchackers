@@ -4,8 +4,8 @@ import sys
 import random
 import itertools
 import re
-from gates import Gates
-from quantumcomputer import QuantumComputer
+from .gates import Gates
+from .quantumcomputer import QuantumComputer
 
 np.random.seed(int(time()))
 
