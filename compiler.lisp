@@ -11,7 +11,6 @@
   `((Z ,x)))
 
 (defun comp-h (x)
-  "pi about X axis followed by pi/2 about Y axis"
   `((H ,x)))
 
 
@@ -44,24 +43,29 @@
     
     (t  (comp (rest x)))))
 
-(defun comp-swap (x)
-  "Compile CNOT using CZ and H gates"
-  `((SWAP ,(car x) ,(cadr x))))
+
+(defun comp-swap (x y complist)
+  (let* ((code `(SWAP ,(cadr x) ,(car x))) (new-complist (cons code complist)))
+    (if (equal (cdr code) y)
+	(progn (setf (caar new-complist) 'CNOT) (append (reverse new-complist)  (cdr new-complist)))
+	(progn (rotatef (car x) (cadr x)) (comp-swap (cdr x) y new-complist)))))
+
+(defun create-seq-list (m n)
+  (labels ((create (i)
+	     (if (= i n)
+		 (list i)
+		 (cons i (create (1+ i))))))
+    (create m)))
 
 
-(defun swap-cnot (x y)
-	   (print x)
-  (if (eq (- (cadr x) (car x)) 1) (append y `((CNOT ,(car x) ,(cadr x))) (append (reverse y) '()))
-      (progn
-	(print (comp-swap (cons (+ (car x) 1) (cons (cadr x)  '()))))
-	(setf y (cons (comp-swap (cons (+ (car x) 1) (cons (cadr x)  '()))) y))
-	     (swap-cnot (cons  (car x) (cons (- (cadr x) 1) '())) (car y))))
-  )
+(defun rev-cnot (x)
+	   "CNOT 2 1 = H 1, H2, CNOT 1 2, H 1, H2"
+	   `(,@(comp-h (cadr x)) ,@(comp-h (car x)) ,@(comp-cnot (reverse x)) ,@(comp-h (cadr x)) ,@(comp-h (cadr x))))
 
 (defun comp-cnot (x)
   "Compile CNOT using CZ and H gates"
-  (if (eq (- (cadr x) (car x)) 1) `((CNOT ,(car x) ,(cadr x)))
-      (swap-cnot x '())))
+  (if (> (car x) (cadr x)) (rev-cnot x)
+  (comp-swap (reverse (create-seq-list  (car x) (cadr x))) x '())))
 
 (defun parse (instr)
   "Parse Instruction into s-expression"
