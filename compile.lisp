@@ -13,8 +13,9 @@
   "Compiles expressions into specified files"
     (case (length x)
        (1 (error "Specify file to compile"))
-       (2  (compiler (second *posix-argv*) "a.eg"))
+       (2  (compiler (second *posix-argv*) "a.ir"))
        (3  (compiler (second *posix-argv*) (third *posix-argv*)))
        (t (error "More than 3 arguments"))))
 
 (execute *posix-argv*)
+(sb-ext:run-program "/bin/sh" (list "-c" "python preprocessor.py") :input nil :output *standard-output*)
