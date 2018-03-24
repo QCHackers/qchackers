@@ -15,17 +15,13 @@ def two_n_size(wvf):
 
 def wavefunction(wvf, QC):
     "Returns the wavefunction in dirac notation"
-    perm_list = ["".join(seq) for seq in itertools.product("01", repeat=int(np.sqrt(len(wvf))))]
+
+    perm_list = ["".join(seq) for seq in itertools.product("01", repeat=len(QC.qregister))]
     wvf_string = ""
     ap_gate_len = len(QC.applied_gates)
-
     for x in range(0, len(perm_list)):
-        if wvf[x,0] != 0:
-            if x != len(perm_list)-1 and len(wvf) != 2:
-                wvf_string += wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x][:ap_gate_len] + ">" + " + "
-            else:
-                wvf_string += wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x] + ">"
-
+        if wvf[x, 0] != 0:
+            wvf_string += str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x] + "> + "
     wvf_string = re.split(r'(\s+)', wvf_string)[:-3]
     wvf_string = "".join(wvf_string)
 
@@ -165,8 +161,7 @@ def evaluate(program, option):
     if option == "string":
         print("It's a string")
         fp = program.splitlines()
-        args = fp[0].split()
-
+        args = fp.pop(0).split()
     else:
         print("It's a file")
         fp = open(program)
@@ -184,17 +179,14 @@ def evaluate(program, option):
     wv = QC.wvf
 
     for (index, line) in enumerate(fp):
-        # Index 0 should the QUBITS instruction determined above
-        if index == 0:
-            continue
-
         args = line.split()
         nArgs = len(args)
         operator = args[0]
+
         if nArgs == 2:
             qubit = int(args[1])
             if (operator == "MEASURE"):
-                MEASURE(QC.qregister[int(qubit)], wv, QC)
+                wv = MEASURE(QC.qregister[int(qubit)], wv, QC)
             else:
                 wv = apply_gate(QC.qregister[int(qubit)], wv, operator, Gates, QC, None)
         elif nArgs == 3:
