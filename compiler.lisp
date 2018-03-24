@@ -22,9 +22,10 @@
   "Writes the generated code to file"
   (let ((in file))
     (labels ((gen-rec (x)
+	       (if (numberp x) (format in "QUBITS ~A~%" (incf x))
 	       (if (null x) '()
 		   (progn (format in "~A~%" (car x))
-			  (gen-rec (cdr x))))))
+			  (gen-rec (cdr x)))))))
       (gen-rec x))))
 
 (defun comp (x)
@@ -71,7 +72,22 @@
   "Parse Instruction into s-expression"
   (loop for i in instr collect (cdr i)))
 
+(defun maximum (1st)
+  (reduce #'max 1st))
 
+(defun analysis (source)
+  (let ((instr '()) (max 0))
+    (with-open-file (in source :direction :input)	
+	(when in
+	  (loop for line = (read-line in nil)
+	       
+	     while line do (progn
+			     (setf instr (lex-line line))
+			     (setf instr (parse instr))
+			     (if (> (maximum (cdr instr)) max) (setf max (maximum (cdr instr))) max) ))))
+    max))
+  
+  
 (defun compiler (source destination)
   "Reads code file and compiles each expression into output file"
   (let ((instr '()))
@@ -79,8 +95,9 @@
       (with-open-file (out destination :direction :output :if-exists :supersede)
 	
 	(when in
-	  (loop for line = (read-line in nil)
-	       
+	  (gen (analysis source) out)
+	  
+	  (loop for line = (read-line in nil)	       
 	     while line do (progn
 			     (setf instr (lex-line line))
 			     (setf instr (parse instr))
