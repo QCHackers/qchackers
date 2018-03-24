@@ -1,5 +1,4 @@
 import numpy as np
-
 import cmath
 class Gates:
     "Contains basic quantum gates"
@@ -27,10 +26,16 @@ class Gates:
     H = (X + Z)/np.sqrt(2)
     T = np.matrix([[1, 0], [0, cmath.exp(1j * np.pi / 4)]])
     S = np.matrix([[1.0, 0.0], [0.0, 1.0j]])
-    CNOT = np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]])
+    CNOT = np.matrix([[1, 0, 0, 0],
+                      [0, 1, 0, 0],
+                      [0, 0, 0, 1],
+                      [0, 0, 1, 0]])
 
     #miscellaneous
-    CZ = np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, -1, 0]])
+    CZ = np.matrix([[1, 0, 0, 0],
+                    [0, 1, 0, 0],
+                    [0, 0, 1, 0],
+                    [0, 0, 0, -1]])
     SWAP = np.matrix([[1, 0, 0, 0],
                       [0, 0, 1, 0],
                       [0, 1, 0, 0],
