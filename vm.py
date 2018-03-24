@@ -59,11 +59,16 @@ class QuantumComputer:
     wvf = ket_zero
 
     def __init__(self, size):
-        for i in range(size):
+        for i in range(1, size):
             self.qregister.append(Qubit(str(i)))
+            
 
             if size != 1:
-                self.wvf= np.kron(self.wvf, self.ket_zero)      
+                self.wvf= np.kron(self.wvf, self.ket_zero)
+                print("Im here")
+
+        print(self.wvf)
+        print(len(self.wvf))
     
        
             
@@ -72,7 +77,7 @@ def two_n_size(wvf):
     "wvf = 2^n. Solve for n"
     return  int(np.log(len(wvf))/np.log(2))
 
-def wavefunction(wvf):
+def wavefunction(wvf, QC):
     "Prints the wavefunction in dirac notation"
     perm_list = ["".join(seq) for seq in itertools.product("01", repeat=int(np.sqrt(len(wvf))))]
     wvf_string = ""    
@@ -116,7 +121,7 @@ def build_gate(addr, wvf_size, x, spacing_num):
         
     return gate
 
-def append_gate(qubit, qubit1):
+def append_gate(qubit, qubit1, QC):
     "Adds gate to apply_gates list to help with printing the wavefunction"
     if qubit.address not in QC.applied_gates:
         QC.applied_gates.append(qubit.address)
@@ -125,7 +130,7 @@ def append_gate(qubit, qubit1):
         QC.applied_gates.append(qubit1.address)
     
 
-def get_base_gate(gate_str):
+def get_base_gate(gate_str, Gates):
     "Returns the gate that was applied"
     if gate_str == "H":
         base_gate = Gates.H
@@ -142,13 +147,13 @@ def get_base_gate(gate_str):
     return base_gate
     
     
-def apply_gate(qubit, wvf, gate_str, qubit1 = "MISSING"):
+def apply_gate(qubit, wvf, gate_str, Gates, QC, qubit1 = "MISSING"):
     "Performs quantum gate operation on the wavefunction"
     addr = int(qubit.address)
     wvf_size = two_n_size(wvf)
     spacing_num = wvf_size - 2 - addr
     
-    base_gate = get_base_gate(gate_str)
+    base_gate = get_base_gate(gate_str, Gates)
 
     if qubit1 == "MISSING":
         x = np.kron(base_gate, Gates.I)
@@ -161,15 +166,16 @@ def apply_gate(qubit, wvf, gate_str, qubit1 = "MISSING"):
         
     gate = build_gate(addr, wvf_size, x, spacing_num)    
 
-    append_gate(qubit, qubit1)
+    append_gate(qubit, qubit1, QC)
     
     wvf = gate * wvf        
-    #print(gate_str, wavefunction(wvf), "\n")
+    #print(gate_str, wavefunction(wvf, QC), "\n")
+    print(gate_str, wvf, "\n")
     
     return wvf
 
 
-def proj(qubit,basis, wvf):
+def proj(qubit,basis, wvf, QC):
     "Computes the projector ono the wavefunction: P_(w_i) = |w_i><w_i|"
     
     addr = int(qubit.address)
@@ -193,71 +199,88 @@ def proj(qubit,basis, wvf):
     
 
 
-def pr(qubit, wvf, basis):
+def pr(qubit, wvf, basis, QC):
     "Computes probability of getting an outcome: Pr(|w_i>) = <v|Pw_i|v>"
     
     wvf_bra = wvf.getH()       
-    ket = proj(qubit, basis, wvf) * wvf    
+    ket = proj(qubit, basis, wvf, QC) * wvf    
     answer = wvf_bra * ket
     
     return answer[0,0]
 
 
-def MEASURE(qubit, wvf):
+def MEASURE(qubit, wvf, QC):
     "Performs a measurement on the qubit and modifies the wavefunction: |new wvf> = P_(w_i)|v/sqrt(Pr(|w_i>) "
     
     addr = qubit.address
-    pr_zero = pr(qubit, wvf, 0)
-    pr_one = pr(qubit, wvf, 1)
+    pr_zero = pr(qubit, wvf, 0, QC)
+    pr_one = pr(qubit, wvf, 1, QC)
+
+    #print("PR ZX", pr_one)
+    #print("PR one", pr_one)
     
-    sum =  + pr_zero + pr_one    
+    sum = pr_zero + pr_one    
     assert (round(sum) == 1.0),"Sum of probabilites does not equal 1"
 
     #print("MEASURE", wavefunction(wvf), "\n")
     
     if random.random() <= pr_zero:
-        wvf = (proj(qubit, 0, wvf) * wvf)/(np.sqrt(pr_zero))
+        wvf = (proj(qubit, 0, wvf, QC) * wvf)/(np.sqrt(pr_zero))
+        print(wvf)
         qubit.measurement = 0
         print("MEASUREMENT of qubit", addr, "is" , 0, "\n")
     else:
-        wvf = (proj(qubit, 1, wvf) * wvf)/(np.sqrt(pr_one))
+        wvf = (proj(qubit, 1, wvf, QC) * wvf)/(np.sqrt(pr_one))
+        print(wvf)
         qubit.measurement = 1
         print("MEASUREMENT of qubit", addr, "is" , 1, "\n")       
                 
     return wvf
 
 
-def evaluate(filepath):
+def evaluate(program, option):
     "Executes program in file"
     
-    global wv
-    
-    with open(filepath) as fp:
-        for line in fp:
-            args = line.split()
-            nArgs = len(args)
-            operator = args[0]
-        
-            if nArgs == 2:
-                qubit = int(args[1])
-                if (operator == "MEASURE"):
-                    MEASURE(QC.qregister[int(qubit)], wv)
-                else:
-                    wv= apply_gate(QC.qregister[int(qubit)], wv, operator, "MISSING")
-            elif nArgs == 3:
-                operator = args[0]
-                qubit = int(args[1])
-                qubit1 = int(args[2])
-                wv= apply_gate(QC.qregister[int(qubit)], wv, operator, QC.qregister[int(qubit1)])
-                
-            else:
-                raise Exception("Exit(1)")
-            
-    
-if __name__ == "__main__":
-    QC = QuantumComputer(4)
+    global Gates
+    global QuantumComputer
+    QC = QuantumComputer(2)
     Gates = Gates()
+    global wv
     wv = QC.wvf
-    evaluate(sys.argv[1])
     
     
+    if option == "string":
+        print("It's a string")
+        fp = program.splitlines()
+    else:
+        print("It's a file")
+        fp = open(program)
+
+            
+    for line in fp:
+        args = line.split()
+        nArgs = len(args)
+        operator = args[0]
+
+        
+    
+        if nArgs == 2:
+            qubit = int(args[1])
+       
+            if (operator == "MEASURE"):
+                print(qubit)
+                MEASURE(QC.qregister[int(qubit)], wv, QC)
+            else:
+                wv= apply_gate(QC.qregister[int(qubit)], wv, operator, Gates, QC, "MISSING")
+        elif nArgs == 3:
+            operator = args[0]
+            qubit = int(args[1])
+            qubit1 = int(args[2])
+            wv= apply_gate(QC.qregister[int(qubit)], wv, operator, Gates, QC, QC.qregister[int(qubit1)])
+                
+        else:
+            raise Exception("Exit(1)")
+
+
+if __name__ == "__main__":
+    evaluate(sys.argv[1], "file")
