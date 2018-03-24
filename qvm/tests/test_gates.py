@@ -1,4 +1,4 @@
-from qvm.gates import Gates
+from gates import Gates
 import numpy as np
 
 def test_gate_matrices():
