@@ -1,0 +1,1 @@
+Hi. I'm a text file being served by Hunchentoot.

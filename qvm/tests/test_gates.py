@@ -3,6 +3,7 @@ import numpy as np
 
 def test_base_gate_matrices():
     "Test the gates which are hardcoded matrices"
+    g = Gates()
     #I
     assert np.isclose(Gates.I, np.eye(2)).all()
     # X
@@ -23,6 +24,9 @@ def test_base_gate_matrices():
     assert np.isclose(Gates.CZ, np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, -1]])).all()
     #SWAP
     assert np.isclose(Gates.SWAP, np.matrix([[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])).all()
+
+    #X with RX
+    assert np.isclose(Gates.X, g.RY(np.pi)).all()
 
 def test_rot_gate_matrices():
     "Test rotation gates which are passed a parametere"
