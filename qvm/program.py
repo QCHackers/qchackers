@@ -5,6 +5,9 @@ class Program:
     def __init__(self, instructions):
         vm.evaluate(instructions, "string")
 
+def run(instructions):
+    Program(instructions)
+
 if __name__ == "__main__":
     p = """H 0
     CNOT 0 1
