@@ -5,4 +5,4 @@
   :depends-on (#:alexa)
   :serial t
   :components ((:file "parser")
-               (:file "assembler")))
+               (:file "compiler")))
