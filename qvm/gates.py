@@ -9,7 +9,7 @@ class Gates:
     #Rotation
     def RX(self, theta):
         return np.matrix([[np.cos(theta / 2 ), -1j * np.sin(theta / 2)],
-                          [-1j * np.sin(theta / 2), np.cos(theta/ 2 )]])
+                          [-1j * np.sin(theta / 2), np.cos(theta / 2 )]])
 
     def RY(self, theta):
         return np.matrix([[np.cos(theta / 2 ),  -np.sin(theta / 2)],

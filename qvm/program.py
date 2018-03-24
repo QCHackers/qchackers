@@ -3,10 +3,14 @@ import vm
 class Program:
     "Consists of a list of instructions"
     def __init__(self, instructions):
-        vm.evaluate(instructions, "string")
+        self.instructions = instructions
+
+    def eval(self):
+        return vm.evaluate(self.instructions, "string")
 
 def run(instructions):
-    Program(instructions)
+    p = Program(instructions)
+    return p.eval()
 
 if __name__ == "__main__":
     p = """QUBITS 2
@@ -14,4 +18,5 @@ if __name__ == "__main__":
     CNOT 0 1
     MEASURE 1
     MEASURE 0"""
-    Program(p)
+    p = Program(instructions)
+    p.eval()
