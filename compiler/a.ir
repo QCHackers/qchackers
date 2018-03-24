@@ -1,0 +1,13 @@
+QUBITS 5
+(H 0)
+(H 1)
+(H 4)
+(SWAP 3 4)
+(SWAP 2 4)
+(CNOT 1 4)
+(SWAP 2 4)
+(SWAP 3 4)
+(H 1)
+(H 1)
+(MEASURE 0)
+(MEASURE 1)
