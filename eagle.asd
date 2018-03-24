@@ -4,5 +4,5 @@
   :license "MIT"
   :depends-on (#:alexa)
   :serial t
-  :components ((:file "parser")
-               (:file "compiler")))
+  :components ((:file "compiler/parser")
+               (:file "compiler/compiler")))

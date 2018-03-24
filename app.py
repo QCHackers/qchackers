@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
+from qvm import vm
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -17,6 +19,8 @@ def homepage():
 def add_message(uuid):
     content = request.json
     print (content['mytext'])
+    p = content['mytext']
+    Program(p)
     return jsonify({"uuid":uuid})
 
 if __name__ == '__main__':
