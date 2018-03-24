@@ -77,9 +77,9 @@ def wavefunction(wvf, QC):
     for x in range(0, len(perm_list)):
         if wvf[x,0] != 0:
             if x != len(perm_list)-1 and len(wvf) != 2:
-                wvf_string =  wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x][:ap_gate_len] + ">" + " + "
+                wvf_string += wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x][:ap_gate_len] + ">" + " + "
             else:
-                wvf_string =  wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x] + ">"
+                wvf_string +=  wvf_string + str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x] + ">"
 
     wvf_string = re.split(r'(\s+)', wvf_string)[:-3]
     wvf_string = "".join(wvf_string)
