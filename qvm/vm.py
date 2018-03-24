@@ -13,16 +13,14 @@ def two_n_size(wvf):
     "wvf = 2^n. Solve for n"
     return  int(np.log(len(wvf))/np.log(2))
 
-def wavefunction(wvf, QC):
+def wavefunction(wvf):
     "Returns the wavefunction in dirac notation"
-
-    perm_list = ["".join(seq) for seq in itertools.product("01", repeat=len(QC.qregister))]
+    perm_list = ["".join(seq) for seq in itertools.product("01", repeat = int(np.log2(len(wvf))))]
     wvf_string = ""
-    ap_gate_len = len(QC.applied_gates)
     for x in range(0, len(perm_list)):
         if wvf[x, 0] != 0:
             wvf_string += str(np.around(wvf[x,0], decimals = 2)) +  "|" + perm_list[x] + "> + "
-    wvf_string = re.split(r'(\s+)', wvf_string)[:-3]
+    wvf_string = re.split(r'(\s+)', wvf_string)[:-4]
     wvf_string = "".join(wvf_string)
 
     return wvf_string
@@ -138,32 +136,30 @@ def MEASURE(qubit, wvf, QC):
     assert (round(sum) == 1.0),"Sum of probabilites does not equal 1"
 
     if random.random() <= pr_zero:
-        print(wavefunction(wvf, QC))
-        wvf = (proj(qubit, 0, wvf, QC) * wvf)/(np.sqrt(pr_zero))
+        #print(wavefunction(wvf, QC))
+        wvf = (proj(qubit, 0, wvf, QC) * wvf) / (np.sqrt(pr_zero))
         qubit.measurement = 0
         print(f"MEASUREMENT of qubit {addr} is 0")
-        print(wavefunction(wvf, QC))
+        print(f"{wavefunction(wvf)}\n"),
     else:
-        print(wavefunction(wvf, QC))
-        wvf = (proj(qubit, 1, wvf, QC) * wvf)/(np.sqrt(pr_one))
+        #print(wavefunction(wvf, QC))
+        wvf = (proj(qubit, 1, wvf, QC) * wvf) / (np.sqrt(pr_one))
         qubit.measurement = 1
         print(f"MEASUREMENT of qubit {addr} is 1")
-        print(f"{wavefunction(wvf, QC)}\n"),
+        print(f"{wavefunction(wvf)}\n"),
 
     return wvf
 
 def evaluate(program, option):
     "Executes program in file"
-    global Gates
+    global gates
     global QuantumComputer
     global wv
 
     if option == "string":
-        print("It's a string")
         fp = program.splitlines()
         args = fp.pop(0).split()
     else:
-        print("It's a file")
         fp = open(program)
         args = fp.readline().split()
 
@@ -175,7 +171,7 @@ def evaluate(program, option):
             raise ValueError('Number of qubits must be an integer > 0')
 
     QC = QuantumComputer(int(num_qubits))
-    Gates = Gates()
+    gates = Gates()
     wv = QC.wvf
 
     for (index, line) in enumerate(fp):
@@ -198,5 +194,6 @@ def evaluate(program, option):
         else:
             raise Exception("Exit(1)")
 
+    return wv
 if __name__ == "__main__":
     evaluate(sys.argv[1], "file")
