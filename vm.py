@@ -2,67 +2,12 @@ import numpy as np
 from time import time
 import sys
 import random
-import cmath
 import itertools
 import re
+from gates import Gates
+from quantumcomputer import QuantumComputer
+
 np.random.seed(int(time()))
-
-class Qubit:
-    "Define a qubit"
-    def __init__(self, address):
-        self.address = address
-        self.measurement = None
-
-class Gates:
-    "Contains basic quantum gates"
-
-    #Rotation
-    def RX(self, theta):
-        return np.matrix([[round(np.cos(theta/ 2 )), np.around(-1j * np.sin(theta / 2))],
-                          [np.around(-1j * np.sin(theta / 2)), np.around(np.cos(theta/ 2 ))]])
-
-    def RY(self, theta):
-        return np.matrix([[np.cos(theta/ 2 ),  np.sin(theta / 2)],
-                          [-1j * np.sin(theta / 2), np.cos(theta/ 2 )]])
-
-    def RZ(self, theta):
-        return np.matrix([[np.exp(-1j * theta / 2),  0],
-                          [0, np.exp(1j * theta / 2)]])
-
-    #pauli
-    I = np.matrix([[1, 0], [0, 1]])
-    X = np.matrix([[0, 1], [1, 0]])
-    Y = np.matrix([[0, 0 - 1j], [0 + 1j, 0]])
-    Z = np.matrix([[1, 0], [0, -1]])
-
-    #universal gates
-    H = (X + Z)/np.sqrt(2)
-    T = np.matrix([[1, 0], [0, cmath.exp(1j * np.pi / 4)]])
-    S = np.matrix([[1.0, 0.0], [0.0, 1.0j]])
-    CNOT = np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]])
-
-    #miscellaneous
-    CZ = np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, -1, 0]])
-    SWAP = np.matrix([[1, 0, 0, 0],
-                      [0, 0, 1, 0],
-                      [0, 1, 0, 0],
-                      [0, 0, 0, 1]])
-
-class QuantumComputer:
-    "Defines a quantum computer. Contains a wavefunction, quantum register, and classical register"
-    cregister = [0] * 5
-    qregister = []
-    applied_gates = []
-    ket_zero = np.matrix([[1], [0]])
-    ket_one = np.matrix([[0], [1]])
-    wvf = ket_zero
-
-    def __init__(self, size):
-        for i in range(size):
-            self.qregister.append(Qubit(str(i)))
-            if i != 1:
-                self.wvf = np.kron(self.wvf, self.ket_zero)
-
 
 def two_n_size(wvf):
     "wvf = 2^n. Solve for n"
