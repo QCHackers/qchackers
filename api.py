@@ -1,10 +1,9 @@
-import vm
 
 
 url ='http://127.0.0.1:5000/api/add_message/1234'
 
 
-with open('epr.eg', 'r') as myfile:
+with open('programs/epr.eg', 'r') as myfile:
     data=myfile.read()
 
 print(data)

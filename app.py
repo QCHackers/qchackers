@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
 from qvm import vm
+import program
 
 app = Flask(__name__)
 
@@ -20,7 +21,7 @@ def add_message(uuid):
     content = request.json
     print (content['mytext'])
     p = content['mytext']
-    Program(p)
+    program.run(p)
     return jsonify({"uuid":uuid})
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-import vm
+from qvm import vm
 
 class Program:
     "Consists of a list of instructions"
