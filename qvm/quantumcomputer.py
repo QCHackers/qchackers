@@ -20,3 +20,6 @@ class QuantumComputer:
     def set_cregister(self, register_addr, val):
         self.cregister[register_addr] = val
         return val
+
+    def get_creg_val(self, register):
+        return self.cregister[register]

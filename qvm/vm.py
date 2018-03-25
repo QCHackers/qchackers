@@ -172,7 +172,8 @@ def evaluate(program, option):
     gates = Gates()
     wv = QC.wvf
 
-    for (index, line) in enumerate(fp):
+    enumerated_instructions = enumerate(fp)
+    for (index, line) in enumerated_instructions:
         args = line.split()
         nArgs = len(args)
         operator = args[0]
@@ -185,11 +186,20 @@ def evaluate(program, option):
             else:
                 wv = apply_gate(QC.qregister[int(qubit)], wv, operator, Gates, QC, None)
         elif nArgs == 3:
-            operator = args[0]
             qubit = int(args[1])
             qubit1 = int(args[2])
             # @TODO Support rotation gates with rotation values for arg[1]
             wv = apply_gate(QC.qregister[int(qubit)], wv, operator, Gates, QC, QC.qregister[int(qubit1)])
+        elif nArgs == 4:
+            operator = args[0]
+            register = int(args[1])
+            value = int(args[2])
+            following_lines = int(args[3])
+
+            if value == QC.get_creg_val(register):
+                for i in range(following_lines):
+                    enumerated_instructions.next()
+
         else:
             raise Exception("Exit(1)")
 
