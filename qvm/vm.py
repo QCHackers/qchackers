@@ -135,19 +135,15 @@ def MEASURE(qubit, wvf, QC):
 
     sum = pr_zero + pr_one
     assert (round(sum) == 1.0),"Sum of probabilites does not equal 1"
+    pr_val = [pr_zero, pr_one]
 
-    if random.random() <= pr_zero:
-        msg += f"wavefunction before measurement: {wavefunction(wvf)}\n"
-        wvf = (proj(qubit, 0, wvf, QC) * wvf) / (np.sqrt(pr_zero))
-        qubit.measurement = 0
-        msg += f"====== MEASURE qubit {addr} : 0\n"
-        msg += f"wavefunction after measurement: {wavefunction(wvf)}\n\n"
-    else:
-        msg += f"wavefunction before measurement: {wavefunction(wvf)}\n"
-        wvf = (proj(qubit, 1, wvf, QC) * wvf) / (np.sqrt(pr_one))
-        qubit.measurement = 1
-        msg += f"====== MEASUREMENT qubit {addr} : 1\n"
-        msg += f"wavefunction after measurement: {wavefunction(wvf)}\n\n"
+    collapsed_val = 0 if random.random() <= pr_zero else 1
+    msg += f"wavefunction before measurement: {wavefunction(wvf)}\n"
+    wvf = (proj(qubit, 0, wvf, QC) * wvf) / (np.sqrt(pr_val[collapsed_val]))
+    qubit.measurement = collapsed_val
+    QC.set_cregister(int(qubit.address), collapsed_val)
+    msg += f"====== MEASURE qubit {addr} : {collapsed_val}\n"
+    msg += f"wavefunction after measurement: {wavefunction(wvf)}\n\n"
 
     return wvf, msg
 
