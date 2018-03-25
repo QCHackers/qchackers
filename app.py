@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from datetime import datetime
 from qvm import vm
+from qvm.vm import isolate_qubit
 import program
 import re
 import requests
@@ -11,6 +12,18 @@ app = Flask(__name__)
 def homepage():
     return render_template('index.html')
 
+
+@app.route('/compiler')
+def compiler():
+    return render_template('compiler.html')
+
+@app.route('/qpl')
+def qpl():
+    return render_template('qpl.html')
+
+@app.route('/vm')
+def vm():
+    return render_template('vm.html')
 
 @app.route('/tic-tac-toe')
 def tic_tac_toe():
@@ -98,6 +111,7 @@ MEASURE 1"""
             p_str += '<li><samp class="code-block">' + i + '</li>'
         p_str += '</ol>'
         j['program'] = p_str
+        j['a'] = f"Qubit 0 : {q0}<br />Qubit 1 : {q1}"
         return (jsonify(j))
 
 
@@ -127,7 +141,7 @@ Z 3"""
     p = "\n".join(p_list)
     wvf, msg = program.run(p)
 
-    msg = vm.isolate_qubit(wvf, 3)
+    msg = isolate_qubit(wvf, 3)
     return jsonify({"program" : p, 'wvf' : msg})
 
 @app.route('/teleportation', methods=['GET', 'POST'])

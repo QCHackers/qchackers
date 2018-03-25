@@ -4,6 +4,7 @@
         $('.js-teleport').click(function(e) {
         $('.js-bobs-code').html('')
         $('.js-bobs-wvf').html('')
+        $('.js-alices-wvf').html('')
             e.preventDefault();
             $this = $(this);
             $this.hide()
@@ -14,6 +15,7 @@
                 url : '/api/teleportsend',
                 data: {'sendit' : 1 },
                 success: function(response) {
+        $('.js-alices-wvf').html(response.a);
                     load_progressbar(response);
                 },
                 dataType: 'json'

@@ -1,41 +1,26 @@
 {% extends '_base.html' %}
 {% block head %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="/static/js/teleport.js"></script>
 {% endblock %}
 
 {% block content %}
+<h2>Quantum Language Compiler</h2>
 <div cl<div class="row">
-    <div class="col-md-4">
-        <h3>Alice's Quatnum Program </h3>
-        <div class="well">
-            <ol>
-                <li><samp class="code-block">QUBITS 3</samp></li>
-                <li><samp class="code-block">H 1</samp></li>
-                <li><samp class="code-block">CNOT 1 2</samp></li>
-                <li><samp class="code-block">CNOT 0 1</samp></li>
-                <li><samp class="code-block">H 0</samp></li>
-                <li><samp class="code-block">MEASURE 0</samp></li>
-                <li><samp class="code-block">MEASURE 1</samp></li>
-            </ol>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="text-center align-middle" style="margin-top:170px;">
-            <button type="button" class="btn btn-primary js-teleport">TELEPORT!</button>
-            <div class="progress" style="display:none;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated js-teleport-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-            </div>
-            <div class="loader"></div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <h3>Bob's Quatnum Program</h3>
-        <div class="well js-bobs-code">
+    <div class="row">
+        <p class="text-left">
+            Our Compiler takes a high level Quantum Programming Language and compiles it down to a Universal gate set which can be efficiently run on our Quantum Virtual Machine. The compiler was written in common LISP.
+        </p>
+        <p class="text-left">
+            For example:<br /><br />
+            <code>BELL 1 2 4</code><br /><br />
+            is compiled to<br /><br />
 
-        </div>
-        <h3>Bob's Entangled WaveFunction</h3>
-        <div class="well js-bobs-wvf"></div>
+            <code>X 1</code><br />
+            <code>X 2</code><br />
+            <code>H 1</code><br />
+            <code>CNOT 1 2</code><br /><br />
+
+            Which entagles Qubit 1 and 2 in the "4th" bell state or 0.71|01> - 0.71|01>
+        </p>
     </div>
 </div>
 
