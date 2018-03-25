@@ -1,22 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/style.css">
+{% extends '_base.html' %}
 
-    <title>Quanacademy</title>
-</head>
-<body ng-app="myApp">
-    <div ng-controller="MainController">
-        <div class="row">
-            <div class="col-xs-12 text-center">
-            <h1>qchackers: Quanacademy</h1>
-            What we hacked:
-	    Compiler
-	    Quantum Programming language
-	    Quantum Virtual Machine
-	    QuantumVideo Game
-	    
-</body>
-</html>
+{% block content %}
+<p>Hello, World!</p>
+{% endblock %}
