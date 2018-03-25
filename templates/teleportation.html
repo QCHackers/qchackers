@@ -5,7 +5,15 @@
 {% endblock %}
 
 {% block content %}
-<div cl<div class="row">
+<h2> Quantum Teleportation Simulation</h2>
+<div class="row">
+    <p class="text-left">
+        Quantum teleportation is a process by which quantum information from one location to another, with the help of classical communication and previously shared quantum entanglement between the sending and receiving location.
+        When you click "Teleport!" This machine runs Alice's code which generates the entangled state and measures the qubits stored in register 0 and 1. The measured values are now classical bits and sent to a separate server where Bob's code is run in our Quantum Virtual Machine.
+        From the classical bits that are measured on Alice's machine and sent to Bob's we are able to impart the quantum state into qubit
+    </p>
+</div>
+<div class="row">
     <div class="col-md-4">
         <h3>Alice's Quatnum Program </h3>
         <div class="well">
@@ -21,12 +29,22 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="text-center align-middle" style="margin-top:170px;">
-            <button type="button" class="btn btn-primary js-teleport">TELEPORT!</button>
-            <div class="progress" style="display:none;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated js-teleport-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+        <div class="text-center align-middle">
+            <div style="margin-bottom:40px">
+                <button type="button" class="btn btn-primary js-teleport">TELEPORT!</button>
+                <div class="progress" style="display:none; margin-top:10px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated js-teleport-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                </div>
             </div>
             <div class="loader"></div>
+            <h3>Engtangled State</h3>
+            <div class="well js-entangled-state">
+                0.5|000> + 0.5|011> + 0.5|100> + 0.5|111>
+            </div>
+            <h3>Alice's Qubit's State</h3>
+            <div class="well js-alices-wvf"></div>
+            <h3>Bobs's Qubit's State</h3>
+            <div class="well js-bobs-wvf"></div>
         </div>
     </div>
     <div class="col-md-4">
@@ -34,8 +52,6 @@
         <div class="well js-bobs-code">
 
         </div>
-        <h3>Bob's Entangled WaveFunction</h3>
-        <div class="well js-bobs-wvf"></div>
     </div>
 </div>
 

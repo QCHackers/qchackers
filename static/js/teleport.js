@@ -3,6 +3,7 @@
     $(document).ready(function(){
         $('.js-teleport').click(function(e) {
         $('.js-bobs-code').html('')
+        $('.js-bobs-wvf').html('')
             e.preventDefault();
             $this = $(this);
             $this.hide()
