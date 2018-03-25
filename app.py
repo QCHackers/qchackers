@@ -21,8 +21,8 @@ def add_message(uuid):
     content = request.json
     print (content['mytext'])
     p = content['mytext']
-    program.run(p)
-    return jsonify({"uuid":uuid})
+    wvf = program.run(p)
+    return jsonify({"wavefunction":vm.wavefunction(wvf)})
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
