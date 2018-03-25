@@ -8,9 +8,10 @@
     <!-- Set width as device width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        
         body {
             font: 20px Montserrat, sans-serif;
-            line-height: 1.8;
+            line-height: 2;
             color: #333;
         }
         p {font-size: 16px;}
@@ -31,6 +32,9 @@
             background-color: #2f2f2f; /* Black Gray */
             color: #fff;
         }
+        .opacity80{
+            opacity: 0.80
+        }
         .container-fluid {
             padding-top: 70px;
             padding-bottom: 70px;
@@ -45,10 +49,13 @@
         font-size: 12px;
         letter-spacing: 5px;
       }
-      .navbar-nav  li a:hover {
-        color: #1abc9c !important;
+      
+      a:hoover {
+         color: #1abc9c !important;
       }
+
     </style>
+    <title>qchackers: QuanAcademy</title>
 
     {% block head %}{% endblock %}
 </head>
@@ -69,26 +76,27 @@
         <li class="nav-item"><a class="nav-link" href="#">Compiler</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Virtual Machine</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Quantum Teleportation</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Tic Tac Toe Game</a></li>
+        <li class="nav-item"><a class="nav-link" href="tic-tac-toe">Tic Tac Toe Game</a></li>
     </ul>
 </nav>
 
 <!-- First Container -->
 <div class="container-fluid bg-1 text-center">
-  <h1 class="margin">qchackers: Quanacademy</h1>
+  <strong><h1 class="margin">qchackers: QuanAcademy</h1></strong>
 
-  <!--<img src="pic.jpeg" class="img-responsive img-circle margin" style="display:inline" alt="Bird" width="350" height="350">-->
+  <img src="/static/img/pic.jpeg" class="img-fluid rounded-circle margin opacity80" style="display:inline" width="350" height="350">
   <h3></h3>
 </div>
+
 
 <!-- Second Container -->
 <div class="container-fluid bg-2 text-center">
     <h3 class="margin">What we hacked:</h3>
         <div class="row">
-            <div class="col-md-3">Compiler</div>
-            <div class="col-md-3">Quantum Programming Language</div>
-            <div class="col-md-3">Quantum Virtual Machine</div>
-            <div class="col-md-3">Quantum Video Game</div>
+            <div class="col-sm-3">Compiler</div>
+            <div class="col-sm-3">Quantum Programming Language</div>
+            <div class="col-sm-3">Quantum Virtual Machine</div>
+            <div class="col-sm-3"><a class="navbar-nav" href="tic-tac-toe">Quantum Video Game</a></div>
         </div>
     <!--<a href="#" class="btn btn-default btn-lg">
     <span class="glyphicon glyphicon-search"></span> Search-->
@@ -96,20 +104,18 @@
 </div>
 
 
+<!-- Third Container-->
+<div class="container-fluid bg-3 text-center"> 
     {% block content %}{% endblock %}
+</div>
+
+    
 </body>
 
 
-<!-- <body ng-app="myApp">
-    <div ng-controller="MainController">
-        <div class="row">
-            <div class="col-xs-12 text-center">
-            <h1>qchackers: Quanacademy</h1>
-            What we hacked:
-	    Compiler
-	    Quantum Programming language
-	    Quantum Virtual Machine
-	    QuantumVideo Game
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+</footer>
 
-</body> -->
+
 </html>
