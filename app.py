@@ -88,5 +88,9 @@ Z 3"""
     msg = vm.isolate_qubit(wvf, 3)
     return jsonify({"results" : msg})
 
+@app.route('/teleportation', methods=['GET', 'POST'])
+def teleporation():
+    return render_template('teleportation.html')
+
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
