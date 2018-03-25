@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify, render_template
 from datetime import datetime
 from qvm import vm
 import program
+import re
+import requests
 
 app = Flask(__name__)
 
@@ -59,8 +61,49 @@ def move():
                    computer_wins = False, player_wins = False, board = game.board)
 
 
-@app.route('/api/teleport', methods=['GET', 'POST'])
-def teleport():
+@app.route('/api/teleportsend', methods=['get', 'post'])
+def teleportsend():
+    sendit = request.form.get('sendit')
+    if not sendit is None:
+        url = request.url_root + 'api/teleportrecieve'
+        p = """QUBITS 3
+H 1
+CNOT 1 2
+CNOT 0 1
+H 0
+MEASURE 0
+MEASURE 1"""
+    wvf, msg = program.run(p)
+
+    # Very hacky way of doing this... @TODO make this better
+    m = re.findall('====== MEASURE qubit (\d) : (\d)', msg)
+    if m[0][0] == '0':
+        q0 = int(m[0][1])
+        q1 = int(m[1][1])
+    else :
+        q1 = int(m[0][1])
+        q0 = int(m[1][1])
+    print(url)
+    res = requests.post(url, json={
+        "q0": q0,
+        "q1" : q1
+    })
+
+    if res.ok:
+        j = res.json()
+        p = j['program']
+        p_split = p.splitlines()
+        p_str = "<ol>"
+        for i in p_split:
+            p_str += '<li><samp class="code-block">' + i + '</li>'
+        p_str += '</ol>'
+        j['program'] = p_str
+        return (jsonify(j))
+
+
+
+@app.route('/api/teleportrecieve', methods=['get', 'post'])
+def teleportrecieve():
     content = request.json
     q0 = content["q0"]
     q1 = content["q1"]
@@ -82,15 +125,14 @@ Z 3"""
         p_list.insert(1, "X 1")
 
     p = "\n".join(p_list)
-    print(p)
     wvf, msg = program.run(p)
 
     msg = vm.isolate_qubit(wvf, 3)
-    return jsonify({"results" : msg})
+    return jsonify({"program" : p, 'wvf' : msg})
 
 @app.route('/teleportation', methods=['GET', 'POST'])
 def teleporation():
     return render_template('teleportation.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True)
+    app.run(debug=True, use_reloader=True, threaded=True)

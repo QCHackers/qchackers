@@ -154,7 +154,7 @@ def isolate_qubit(wvf, qubit):
 
     qbit_str = ""
     wvf_slist = wavefunction(wvf).split(' + ')
-    regex_str = "(\d+\.\d+)\|"
+    regex_str = "(-?\d+\.\d+)\|"
     for i in range(0, qubit):
         regex_str += '\d'
 
