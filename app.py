@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def homepage():
     return render_template('index.html')
-    
+
 
 @app.route('/tic-tac-toe')
 def tic_tac_toe():
@@ -22,8 +22,6 @@ def add_message(uuid):
     p = content['mytext']
     wvf, msg = program.run(p)
     return jsonify({"results" : msg})
-
-
 
 
 @app.route('/move', methods=['POST'])
@@ -59,6 +57,36 @@ def move():
     # Game still going
     return jsonify(computer_row = computer_move['row'], computer_col = computer_move['col'],
                    computer_wins = False, player_wins = False, board = game.board)
+
+
+@app.route('/api/teleport', methods=['GET', 'POST'])
+def teleport():
+    content = request.json
+    q0 = content["q0"]
+    q1 = content["q1"]
+
+    p = """QUBITS 4
+MEASURE 0
+MEASURE 1
+H 2
+CNOT 2 3
+CLASSICAL 1 1 1
+X 3
+CLASSICAL 0 1 1
+Z 3"""
+
+    p_list = p.splitlines()
+    if q0 == 1:
+        p_list.insert(1, "X 0")
+    if q1 == 1:
+        p_list.insert(1, "X 1")
+
+    p = "\n".join(p_list)
+    print(p)
+    wvf, msg = program.run(p)
+
+    msg = vm.isolate_qubit(wvf, 3)
+    return jsonify({"results" : msg})
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)

@@ -139,13 +139,32 @@ def MEASURE(qubit, wvf, QC):
 
     collapsed_val = 0 if random.random() <= pr_zero else 1
     msg += f"wavefunction before measurement: {wavefunction(wvf)}\n"
-    wvf = (proj(qubit, 0, wvf, QC) * wvf) / (np.sqrt(pr_val[collapsed_val]))
+    wvf = (proj(qubit, collapsed_val, wvf, QC) * wvf) / (np.sqrt(pr_val[collapsed_val]))
     qubit.measurement = collapsed_val
     QC.set_cregister(int(qubit.address), collapsed_val)
     msg += f"====== MEASURE qubit {addr} : {collapsed_val}\n"
     msg += f"wavefunction after measurement: {wavefunction(wvf)}\n\n"
 
     return wvf, msg
+
+def isolate_qubit(wvf, qubit):
+    """ Extract just a qubit from a wavefunction eg:
+        qbit 3 => 0.71|001>+0.71|000> => 0.71|1> + 0.71|0>
+        qbit 2 => 0.71|001>+0.71|000> => 0.71|0> + 0.71|0>"""
+
+    qbit_str = ""
+    wvf_slist = wavefunction(wvf).split(' + ')
+    regex_str = "(\d+\.\d+)\|"
+    for i in range(0, qubit):
+        regex_str += '\d'
+
+    regex_str += '(\d)'
+    for wvf_part in wvf_slist:
+        matches = re.findall(regex_str, wvf_part)
+        if not matches is None:
+            qbit_str += matches[0][0] + "|" + matches[0][1] + "> + "
+
+    return qbit_str[:-3]
 
 def evaluate(program, option):
     "Executes program in file"
@@ -194,9 +213,12 @@ def evaluate(program, option):
             register = int(args[1])
             value = int(args[2])
             following_lines = int(args[3])
-
+            print(register)
+            print(QC.get_creg_val(register))
+            print(operator)
             if operator == "CLASSICAL":
-                if value == QC.get_creg_val(register):
+                print(f"{value} ---- {QC.get_creg_val(register)}")
+                if value != QC.get_creg_val(register):
                     for i in range(following_lines):
                         next(enumerated_instructions, None)
 

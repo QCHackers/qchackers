@@ -1,7 +1,8 @@
-import vm
+from qvm import vm
 import sys
 
 if len(sys.argv) == 2:
-    vm.evaluate(sys.argv[1], "file")
+    a, b = vm.evaluate(sys.argv[1], "file")
+    print(b)
 else:
      raise Exception("Add a file to run")

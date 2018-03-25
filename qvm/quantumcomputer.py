@@ -10,6 +10,13 @@ class QuantumComputer:
     ket_one = np.matrix([[0], [1]])
     wvf = ket_zero
 
+    bell_states = {
+        "B00" : "0.71|00> + 0.71|11>",
+        "B01" : "0.71|01> + 0.71|10>",
+        "B10" : "0.71|00> + -0.71|11>",
+        "B11" : "0.71|01> + -0.71|10>",
+    }
+
     def __init__(self, size):
         for i in range(size):
             self.qregister.append(Qubit(str(i)))
