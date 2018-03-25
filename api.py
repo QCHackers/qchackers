@@ -5,8 +5,9 @@ with open('programs/epr.eg', 'r') as myfile:
     data=myfile.read()
 
 print(data)
-    
+
 import requests
 res = requests.post(url, json={"mytext":data})
 if res.ok:
-    print (res.json())
+    json = res.json()
+    print(f"{json['results']}")
