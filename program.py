@@ -13,10 +13,11 @@ def run(instructions):
     return p.eval()
 
 if __name__ == "__main__":
-    p = """QUBITS 2
+    instructions = """QUBITS 2
     H 0
     CNOT 0 1
     MEASURE 1
     MEASURE 0"""
     p = Program(instructions)
-    p.eval()
+    w, m = p.eval()
+    print(m)

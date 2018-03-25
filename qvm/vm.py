@@ -128,6 +128,7 @@ def pr(qubit, wvf, basis, QC):
 def MEASURE(qubit, wvf, QC):
     "Performs a measurement on the qubit and modifies the wavefunction: |new wvf> = P_(w_i)|v/sqrt(Pr(|w_i>) "
 
+    msg = ""
     addr = qubit.address
     pr_zero = pr(qubit, wvf, 0, QC)
     pr_one = pr(qubit, wvf, 1, QC)
@@ -136,19 +137,19 @@ def MEASURE(qubit, wvf, QC):
     assert (round(sum) == 1.0),"Sum of probabilites does not equal 1"
 
     if random.random() <= pr_zero:
-        #print(wavefunction(wvf, QC))
+        msg += f"wavefunction before measurement: {wavefunction(wvf)}\n"
         wvf = (proj(qubit, 0, wvf, QC) * wvf) / (np.sqrt(pr_zero))
         qubit.measurement = 0
-        print(f"MEASUREMENT of qubit {addr} is 0")
-        print(f"{wavefunction(wvf)}\n"),
+        msg += f"====== MEASURE qubit {addr} : 0\n"
+        msg += f"wavefunction after measurement: {wavefunction(wvf)}\n\n"
     else:
-        #print(wavefunction(wvf, QC))
+        msg += f"wavefunction before measurement: {wavefunction(wvf)}\n"
         wvf = (proj(qubit, 1, wvf, QC) * wvf) / (np.sqrt(pr_one))
         qubit.measurement = 1
-        print(f"MEASUREMENT of qubit {addr} is 1")
-        print(f"{wavefunction(wvf)}\n"),
+        msg += f"====== MEASUREMENT qubit {addr} : 1\n"
+        msg += f"wavefunction after measurement: {wavefunction(wvf)}\n\n"
 
-    return wvf
+    return wvf, msg
 
 def evaluate(program, option):
     "Executes program in file"
@@ -156,6 +157,7 @@ def evaluate(program, option):
     global QuantumComputer
     global wv
 
+    msg = ""
     if option == "string":
         fp = program.splitlines()
         args = fp.pop(0).split()
@@ -182,7 +184,8 @@ def evaluate(program, option):
         if nArgs == 2:
             qubit = int(args[1])
             if (operator == "MEASURE"):
-                wv = MEASURE(QC.qregister[int(qubit)], wv, QC)
+                wv, measure_msg = MEASURE(QC.qregister[int(qubit)], wv, QC)
+                msg += measure_msg
             else:
                 wv = apply_gate(QC.qregister[int(qubit)], wv, operator, Gates, QC, None)
         elif nArgs == 3:
@@ -194,6 +197,7 @@ def evaluate(program, option):
         else:
             raise Exception("Exit(1)")
 
-    return wv
+    msg += f"Final wavefunction: \n{wavefunction(wv)}"
+    return wv, msg
 if __name__ == "__main__":
     evaluate(sys.argv[1], "file")
