@@ -18,7 +18,7 @@ def homepage():
 
 @app.route('/tic-tac-toe')
 def tic_tac_toe():
-    return render_template('index.html')
+    return render_template('tic-tac-toe.html')
 
 
 @app.route('/api/add_message/<uuid>', methods=['GET', 'POST'])
