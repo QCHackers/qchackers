@@ -1,13 +1,12 @@
 
-url ='http://127.0.0.1:5000/api/add_message/1234'
+url ='https://whispering-mountain-51676.herokuapp.com//api/add_message/1234'
 
 with open('programs/epr.eg', 'r') as myfile:
     data=myfile.read()
 
 print(data)
-
+    
 import requests
 res = requests.post(url, json={"mytext":data})
 if res.ok:
-    json = res.json()
-    print(f"{json['results']}")
+    print (res.json())
