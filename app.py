@@ -17,7 +17,7 @@ def homepage():
 
 
 @app.route('/tic-tac-toe')
-def homepage():
+def tic_tac_toe():
     return render_template('index.html')
 
 
