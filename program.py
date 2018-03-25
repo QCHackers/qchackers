@@ -17,6 +17,7 @@ if __name__ == "__main__":
     H 0
     CNOT 0 1
     MEASURE 1
+    CLASSICAL 1 0 4 
     MEASURE 0"""
     p = Program(instructions)
     w, m = p.eval()
