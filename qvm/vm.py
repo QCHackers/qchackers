@@ -180,7 +180,7 @@ def evaluate(program, option):
 
         if nArgs == 2:
             qubit = int(args[1])
-            if (operator == "MEASURE"):
+            if operator == "MEASURE":
                 wv, measure_msg = MEASURE(QC.qregister[int(qubit)], wv, QC)
                 msg += measure_msg
             else:
@@ -191,14 +191,14 @@ def evaluate(program, option):
             # @TODO Support rotation gates with rotation values for arg[1]
             wv = apply_gate(QC.qregister[int(qubit)], wv, operator, Gates, QC, QC.qregister[int(qubit1)])
         elif nArgs == 4:
-            operator = args[0]
             register = int(args[1])
             value = int(args[2])
             following_lines = int(args[3])
 
-            if value == QC.get_creg_val(register):
-                for i in range(following_lines):
-                    enumerated_instructions.next()
+            if operator == "CLASSICAL":
+                if value == QC.get_creg_val(register):
+                    for i in range(following_lines):
+                        next(enumerated_instructions, None)
 
         else:
             raise Exception("Exit(1)")
