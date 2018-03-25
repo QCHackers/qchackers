@@ -10,7 +10,7 @@ def run(path):
         data=myfile.read()
         wvf, msg = program.run(data)
         print(msg)
-
+        
         # Very hacky way of doing this... @TODO make this better
         m = re.findall('====== MEASURE qubit (\d) : (\d)', msg)
         if m[0][0] == '0':
