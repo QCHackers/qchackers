@@ -1,3 +1,0 @@
-from gates import Gates
-
-print(Gates.RX(np.pi, 0))
