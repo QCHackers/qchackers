@@ -96,7 +96,7 @@ MEASURE 1"""
     else :
         q1 = int(m[0][1])
         q0 = int(m[1][1])
-    print(url)
+        
     res = requests.post(url, json={
         "q0": q0,
         "q1" : q1
