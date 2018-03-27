@@ -15,7 +15,7 @@
                 url : '/api/teleportsend',
                 data: {'sendit' : 1 },
                 success: function(response) {
-        $('.js-alices-wvf').html(response.a);
+                    $('.js-alices-wvf').html(response.a);
                     load_progressbar(response);
                 },
                 dataType: 'json'
