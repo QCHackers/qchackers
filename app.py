@@ -5,6 +5,7 @@ from qvm.vm import isolate_qubit
 import program
 import re
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -25,16 +26,22 @@ def qpl():
 def vm():
     return render_template('vm.html')
 
-@app.route('/tic-tac-toe')
-def tic_tac_toe():
-    return render_template('tic-tac-toe.html')
-
-
 @app.route('/api/add_message/<uuid>', methods=['GET', 'POST'])
 def add_message(uuid):
     content = request.json
     print (content['mytext'])
     p = content['mytext']
+    os.chdir('compiler/')
+    print(os.getcwd()  )
+    text_file = open("program.txt", "w")
+    text_file.write(p)
+    text_file.close()
+    os.system ("bash -c './compile.lisp program.txt'")
+    os.system ("bash -c 'python preprocessor.py a.ir'")
+    
+    with open('a.eg', 'r') as myfile:
+        p=myfile.read()
+        
     wvf, msg = program.run(p)
     return jsonify({"results" : msg})
 
@@ -62,7 +69,7 @@ MEASURE 1"""
     else :
         q1 = int(m[0][1])
         q0 = int(m[1][1])
-        
+    print(url)
     res = requests.post(url, json={
         "q0": q0,
         "q1" : q1
