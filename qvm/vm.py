@@ -9,6 +9,12 @@ from .quantumcomputer import QuantumComputer
 
 np.random.seed(int(time()))
 
+# @TODO Document code
+# @TODO Implement try/catch where appropriate
+# @TODO Figure out importing scheme so both top level can import as well as the ability to run tests
+# @TODO revisit overall architecture
+# @TODO Better print helper functions
+
 def two_n_size(wvf):
     "wvf = 2^n. Solve for n"
     return  int(np.log(len(wvf))/np.log(2))
