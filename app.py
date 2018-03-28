@@ -7,12 +7,16 @@ import re
 import requests
 import os
 
+name = "hello"
+f'He said his name is {name!r}.'
+
+ 
 app = Flask(__name__)
+ 
 
-@app.route('/')
-def homepage():
-    return render_template('index.html')
-
+@app.route("/")
+def hello():
+ return "Hello world!"
 
 @app.route('/compiler')
 def compiler():
@@ -26,22 +30,26 @@ def qpl():
 def vm():
     return render_template('vm.html')
 
+
 @app.route('/api/add_message/<uuid>', methods=['GET', 'POST'])
 def add_message(uuid):
     content = request.json
     print (content['mytext'])
     p = content['mytext']
-    os.chdir('compiler/')
-    print(os.getcwd()  )
-    text_file = open("program.txt", "w")
+   
+  
+    #os.chmod("program.txt", 777)
+    text_file = open("compiler/program.txt", "w")
+    #os.chmod("program.txt", "w")
     text_file.write(p)
     text_file.close()
-    os.system ("bash -c './compile.lisp program.txt'")
+    os.system ("bash -c './compiler/compile.lisp program.txt'")
+
     os.system ("bash -c 'python preprocessor.py a.ir'")
     
-    with open('a.eg', 'r') as myfile:
+    with open('compiler/a.eg', 'r') as myfile:
         p=myfile.read()
-        
+     
     wvf, msg = program.run(p)
     return jsonify({"results" : msg})
 
@@ -120,6 +128,6 @@ Z 3"""
 @app.route('/teleportation', methods=['GET', 'POST'])
 def teleporation():
     return render_template('teleportation.html')
-
-if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True, threaded=True)
+ 
+if __name__ == "__main__":
+ app.run()
