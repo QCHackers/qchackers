@@ -14,9 +14,9 @@ f'He said his name is {name!r}.'
 app = Flask(__name__)
  
 
-@app.route("/")
-def hello():
- return "Hello world!"
+@app.route('/')
+def homepage():
+    return render_template('index.html')
 
 @app.route('/compiler')
 def compiler():
