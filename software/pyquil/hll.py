@@ -2,6 +2,8 @@ from pyquil.quil import Program
 from pyquil.gates import H, X, CNOT, MEASURE
 from pyquil.api import SyncConnection
 
+#Reference: https://arxiv.org/pdf/1302.4310.pdf
+
 p = Program()
 p.inst("""DEFGATE CH(%theta):
     1, 0, 0, 0
