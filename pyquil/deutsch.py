@@ -11,8 +11,6 @@ qvm = QVMConnection()
 # f0
 deutsch = Program(
     #Put qubit 0 and qubit 1 into superposition
-    Z(0),
-   
 )
 
 #print("Deutsch QVM N = 2 constant")
@@ -52,7 +50,7 @@ deutsch = Program(
 )
 
 #print("Deutsch QVM N = 2 balanced")
-result = qvm.run_and_measure(deutsch, [0], 5)
+#result = qvm.run_and_measure(deutsch, [0], 5)
 #print(result)
 
 

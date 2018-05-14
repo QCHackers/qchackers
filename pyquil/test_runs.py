@@ -1,11 +1,17 @@
 from pyquil.quil import Program
-#from pyquil.api import QPUConnection
+from pyquil.api import QPUConnection
 from pyquil.api import QVMConnection
 from pyquil.gates import *
 
 
-#qpu = QPUConnection(device_name='19Q-Acorn')
+qpu = QPUConnection(device_name='19Q-Acorn')
 qvm = QVMConnection()
+
+
+test_run_and_measure_empty = Program()
+
+print(test_run_and_measure_empty)
+result = qvm.run_and_measure(Program(), [0], 1)
 
 
 test_run = Program(
@@ -55,9 +61,9 @@ print(result)
 
 test_run_empty = Program()
 
-#print("Test run empty")
-#result = qvm.run(test_run_empty, [0], 1)
-#print(result)
+print("Test run empty")
+result = qvm.run(test_run_empty, [0], 1)
+print(result)
 
 
 test_run_async_empty = Program()
