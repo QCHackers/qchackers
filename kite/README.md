@@ -1,1 +1,0 @@
-# qc-hack-isu
