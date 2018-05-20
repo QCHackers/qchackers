@@ -1,1 +1,0 @@
-For Algorithms, programming languages, quantum complexity theory.
