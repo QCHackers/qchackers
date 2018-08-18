@@ -7,20 +7,23 @@ from pyquil.gates import *
 #qpu = QPUConnection(device_name='19Q-Acorn')
 qvm = QVMConnection()
 
+
 def measurement_distribution(result):
-    num_zeros=0
-    num_ones=0    
+    num_zeros = 0
+    num_ones = 0
     for x in result:
         if x == [0]:
-            num_zeros +=1
+            num_zeros += 1
         else:
-            num_ones +=1
+            num_ones += 1
     return [num_zeros, num_ones]
+
 
 def get_Re(result):
     dist = measurement_distribution(result)
-    return dist[0] - dist[1]  
-    
+    return dist[0] - dist[1]
+
+
 hadamard_test0 = Program(
     X(0),
     H(0),

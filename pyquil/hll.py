@@ -2,7 +2,7 @@ from pyquil.quil import Program
 from pyquil.gates import H, X, CNOT, MEASURE
 from pyquil.api import SyncConnection
 
-#Reference: https://arxiv.org/pdf/1302.4310.pdf
+# Reference: https://arxiv.org/pdf/1302.4310.pdf
 
 p = Program()
 p.inst("""DEFGATE CH(%theta):
@@ -22,7 +22,7 @@ p.inst(MEASURE(0))
 p.inst(MEASURE(1))
 p.inst(MEASURE(2))
 
- # run the program on a QVM
+# run the program on a QVM
 qvm = SyncConnection()
 
 wvf, _ = qvm.wavefunction(p)

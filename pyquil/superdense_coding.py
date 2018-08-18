@@ -10,18 +10,18 @@ qvm = QVMConnection()
 
 # f0
 zero_one = Program(
-    #Put qubit 0 and qubit 1 into superposition
+    # Put qubit 0 and qubit 1 into superposition
     H(0),
-    CNOT(0,1),   
+    CNOT(0, 1),
     X(0),
     Z(0),
     CNOT(0, 1),
-    H (0),
-    
+    H(0),
+
 )
-wvf  = qvm.wavefunction(zero_one)
+wvf = qvm.wavefunction(zero_one)
 
 print(wvf)
 print("0 1")
-result = qvm.run_and_measure(zero_one, [0,1], 100)
+result = qvm.run_and_measure(zero_one, [0, 1], 100)
 print(result)

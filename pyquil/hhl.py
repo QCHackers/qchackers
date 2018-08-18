@@ -20,9 +20,8 @@ p.inst(MEASURE(0))
 p.inst(MEASURE(1))
 p.inst(MEASURE(2))
 
- # run the program on a QVM
+# run the program on a QVM
 qvm = SyncConnection()
 
 wvf, _ = qvm.wavefunction(p)
 print(wvf)
-

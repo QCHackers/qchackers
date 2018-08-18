@@ -11,5 +11,3 @@ ghz_state_efficient = Program(H(0), CNOT(0, 1), CNOT(1, 2))
 print("3Q GHZ State QVM")
 result = qvm.run_and_measure(ghz_state, [0, 1, 2], 100)
 print(result)
-
-

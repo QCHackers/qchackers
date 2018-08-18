@@ -32,4 +32,3 @@ crz = np.array([[1, 0, 0, 0],
 #p = Program().defgate("CRZ", crz, [theta])
 
 print(p.out())
-

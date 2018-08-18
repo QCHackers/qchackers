@@ -8,14 +8,11 @@ np.transpose(a)
 LA.inv(a)
 
 
-def H (theta):
-    return np.matrix ([[np.cos(2 * theta) , np.sin(2 * theta)], [np.sin(2 * theta), -np.cos(2 * theta)]])
-
-                      
- 
-#print H (np.pi/8)
-
-print H (np.pi/16)
+def H(theta):
+    return np.matrix([[np.cos(2 * theta), np.sin(2 * theta)], [np.sin(2 * theta), -np.cos(2 * theta)]])
 
 
+# print H (np.pi/8)
 
+
+print H(np.pi/16)

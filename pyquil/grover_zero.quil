@@ -1,4 +1,4 @@
-#Grover N=2 A=00
+# Grover N=2 A=00
 H 1
 H 2
 S 1

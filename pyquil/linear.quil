@@ -1,9 +1,9 @@
-DEFGATE CH(%theta):
+DEFGATE CH( % theta):
     1, 0, 0, 0
     0, 1, 0, 0
     0, 0, cos(2*%theta), sin(2*%theta)
     0, 0, sin(2*%theta), cos(-2*%theta)
-    
+
 H 3
 CNOT 3 2
 CNOT 2 1

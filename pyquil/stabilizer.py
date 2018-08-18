@@ -10,11 +10,11 @@ grover = Program(
     I(1),
     I(4),
     I(5),
-    CNOT(5,2),
-    CNOT(0,2),
-    CNOT(4,2),
-    CNOT(1,2),
-    
+    CNOT(5, 2),
+    CNOT(0, 2),
+    CNOT(4, 2),
+    CNOT(1, 2),
+
 )
 print("Plaquette Z 0000")
 result = qpu.run_and_measure(grover, [2], 100)

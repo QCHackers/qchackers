@@ -1,4 +1,4 @@
-#unfinished: https://www.nature.com/articles/s41467-017-01904-7
+# unfinished: https://www.nature.com/articles/s41467-017-01904-7
 
 from pyquil.quil import Program
 #from pyquil.api import QPUConnection

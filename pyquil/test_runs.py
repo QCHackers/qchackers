@@ -16,8 +16,8 @@ result = qvm.run_and_measure(Program(), [0], 1)
 
 test_run = Program(
     H(0),
-    CNOT(0,1)   
- 
+    CNOT(0, 1)
+
 )
 
 print("test_run")
@@ -27,8 +27,8 @@ print(result)
 
 test_run_async = Program(
     H(0),
-    CNOT(0,1)  
- 
+    CNOT(0, 1)
+
 )
 
 print("test_run_async")
@@ -38,8 +38,8 @@ print(result)
 
 test_run_and_measure = Program(
     H(0),
-    CNOT(0,1)   
- 
+    CNOT(0, 1)
+
 )
 
 print("test_run_and_measure")
@@ -49,14 +49,13 @@ print(result)
 
 test_run_and_measure_async = Program(
     H(0),
-    CNOT(0,1)   
- 
+    CNOT(0, 1)
+
 )
 
 print("test_run_and_measure_async")
 result = qvm.run_and_measure(test_run_and_measure_async, [0], 1)
 print(result)
-
 
 
 test_run_empty = Program()
@@ -70,19 +69,18 @@ test_run_async_empty = Program()
 
 #print("Test run async empty")
 #result = qvm.run(test_run_async_empty, [0], 1)
-#print(result)
+# print(result)
 
 
 test_run_and_measure_empty = Program()
 
 #print("Test run_and_measure_empty")
 #result = qvm.run_and_measure(test_run_and_measure_empty, [0], 1)
-#print(result)
-
+# print(result)
 
 
 test_run_and_measure_async_empty = Program()
 
-#print("test_run_and_measure_async")
+# print("test_run_and_measure_async")
 #result = qvm.run_and_measure(test_run_and_measure_async_empty, [0], 1)
-#print(result)
+# print(result)

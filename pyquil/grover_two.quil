@@ -1,4 +1,4 @@
-#Grover N=2 A=10
+# Grover N=2 A=10
 
 H 1
 H 2
@@ -20,5 +20,3 @@ H 1
 H 2
 MEASURE 1 [1]
 MEASURE 2 [2]
- 
- 

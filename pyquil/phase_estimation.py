@@ -9,7 +9,7 @@ qvm = QVMConnection()
 phase_estimation_0 = Program(
     H(0),
     H(1),
-    CNOT(0, 1), #CNOT is another name for cX which is cU in this example
+    CNOT(0, 1),  # CNOT is another name for cX which is cU in this example
     H(0),
 )
 print("Expected answer is 0")
@@ -20,7 +20,7 @@ phase_estimation_1 = Program(
     H(0),
     Z(0),
     H(1),
-    CNOT(0, 1), #CNOT is another name for CX which is CU in this example
+    CNOT(0, 1),  # CNOT is another name for CX which is CU in this example
     H(0),
 )
 print("Expected answer is 1")

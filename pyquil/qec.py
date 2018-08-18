@@ -21,16 +21,16 @@ qec = Program(
     H(0),
     H(1),
     H(2),
-    CNOT(0,1),
-    CNOT(2,1),
+    CNOT(0, 1),
+    CNOT(2, 1),
     H(0),
     H(1),
     H(2),
-    
+
 )
 #print("Encoder into bit-flip code (qubits 0-2)")
 #result = qpu.run_and_measure(qec, [0,1,2], 100)
-#print(result)
+# print(result)
 
 
 qec = Program(
@@ -38,15 +38,15 @@ qec = Program(
     I(1),
     I(4),
     I(5),
-    CNOT(5,2),
-    CNOT(0,2),
-    CNOT(4,2),
-    CNOT(1,2),
-    
+    CNOT(5, 2),
+    CNOT(0, 2),
+    CNOT(4, 2),
+    CNOT(1, 2),
+
 )
 #print("Plaquette Z 0000")
 #result = qpu.run_and_measure(qec, [2], 100)
-#print(result)
+# print(result)
 """
 First qubit: 10
 Second qubit: 11
@@ -57,51 +57,51 @@ Measuring the Error syndrome doesn't destroy the superposition of the logical st
 This code is sensitive to phase flip errors.
 
 """
-bit_flip = Program(    
+bit_flip = Program(
     X(1),
     CNOT(0, 3),
     CNOT(1, 3),
     CNOT(1, 4),
-    CNOT(2, 4),     
+    CNOT(2, 4),
 )
 
-result = qvm.run_and_measure(bit_flip, [3,4], 10)
+result = qvm.run_and_measure(bit_flip, [3, 4], 10)
 #print("Bit Flip %s" % result)
 
 
-bit_flip_paper = Program(    
-   
+bit_flip_paper = Program(
+
     CNOT(0, 1),
     CNOT(1, 2),
     CNOT(0, 3),
     CNOT(1, 3),
     CNOT(0, 4),
-    CNOT(2, 4),     
+    CNOT(2, 4),
 )
 
-result = qvm.run_and_measure(bit_flip_paper, [3,4], 10)
+result = qvm.run_and_measure(bit_flip_paper, [3, 4], 10)
 #print("Bit Flip Paper %s" % result)
 
 """
 https://en.wikipedia.org/wiki/Quantum_error_correction
 """
-bit_flip_wiki = Program(    
-   
+bit_flip_wiki = Program(
+
     CNOT(0, 1),
     CNOT(0, 2),
     X(0),
 
-     #Parity
+    # Parity
     CNOT(0, 3),
     CNOT(1, 3),
     CNOT(1, 4),
     CNOT(2, 4),
-    
+
     CNOT(0, 1),
     CNOT(0, 2),
     CCNOT(2, 1, 0),
 
-   
+
 )
 
 result = qvm.run_and_measure(bit_flip_wiki, [3, 4], 10)
@@ -116,7 +116,7 @@ To correct a phase error do the same bit flip code, but do it in a |+> and |-> b
 This code is sensitive to bit flip errors
 
 """
-phase_flip = Program(    
+phase_flip = Program(
 
     X(1),
     CNOT(0, 3),
@@ -126,13 +126,13 @@ phase_flip = Program(
     H(0),
     H(1),
     H(2),
-)   
+)
 
 
 #result = qvm.run_and_measure(qec, [3,4], 10)
 #print("Phase Flip %s" % result)
 
-phase_flip_paper = Program(    
+phase_flip_paper = Program(
     CNOT(0, 1),
     CNOT(1, 2),
     X(2),
@@ -142,18 +142,18 @@ phase_flip_paper = Program(
     CNOT(2, 4),
     H(0),
     H(1),
-    H(2),    
+    H(2),
 )
 
-result = qvm.run_and_measure(phase_flip_paper, [3,4], 10)
+result = qvm.run_and_measure(phase_flip_paper, [3, 4], 10)
 #print("Phase Flip Paper %s" % result)
 
 
 """
 https://en.wikipedia.org/wiki/Quantum_error_correction
 """
-phase_flip_wiki = Program(    
-   
+phase_flip_wiki = Program(
+
     CNOT(0, 1),
     CNOT(0, 2),
     H(0),
@@ -167,7 +167,7 @@ phase_flip_wiki = Program(
     H(2),
     CNOT(0, 1),
     CNOT(0, 2),
-    CCNOT(2, 1, 0),     
+    CCNOT(2, 1, 0),
 )
 
 result = qvm.run_and_measure(phase_flip_wiki, [0], 10)
@@ -177,8 +177,8 @@ result = qvm.run_and_measure(phase_flip_wiki, [0], 10)
 Can correct for bit flip errors and phase errors. Like a Y gate which is a bit flip and a phase flip.
 
 """
-shor_code = Program(    
-   
+shor_code = Program(
+
     CNOT(0, 3),
     CNOT(0, 6),
     H(0),
@@ -191,7 +191,7 @@ shor_code = Program(
     CNOT(3, 5),
     CNOT(6, 8),
 
-    
+
 
     CNOT(0, 1),
     CNOT(3, 4),
@@ -210,36 +210,36 @@ shor_code = Program(
     CCNOT(6, 3, 0),
 
 
-    #Parity bit flip block 0
+    # Parity bit flip block 0
     CNOT(0, 9),
     CNOT(1, 9),
     CNOT(1, 10),
     CNOT(2, 10),
 
 
-    #Parity bit flip block 1
+    # Parity bit flip block 1
     CNOT(3, 11),
     CNOT(4, 11),
     CNOT(4, 12),
     CNOT(5, 12),
 
 
-     #Parity bit flip block 2
+    # Parity bit flip block 2
     CNOT(6, 13),
     CNOT(7, 13),
     CNOT(7, 14),
     CNOT(8, 14),
 
 
-    #Parity bit flip block 2
+    # Parity bit flip block 2
     CNOT(0, 15),
     CNOT(3, 15),
     CNOT(3, 16),
     CNOT(6, 16),
-)   
+)
 
 
-result = qvm.run_and_measure(shor_code, [9,10], 10)
+result = qvm.run_and_measure(shor_code, [9, 10], 10)
 #print("Shor %s" % result)
 
 """
@@ -256,7 +256,7 @@ X: Passes for all bit flip tests
 Z: Passes for all phase flip tests
 Y: Passes for all Phase flip tests and bit flip!
 """
-shor_code_wiki = Program(    
+shor_code_wiki = Program(
     CNOT(0, 3),
     CNOT(0, 6),
     H(0),
@@ -268,28 +268,28 @@ shor_code_wiki = Program(
     CNOT(0, 2),
     CNOT(3, 5),
     CNOT(6, 8),
-    
-    #Error
+
+    # Error
     Y(0),
-    
-    #Parity bit flip block 0: This works
+
+    # Parity bit flip block 0: This works
     CNOT(0, 9),
     CNOT(1, 9),
     CNOT(1, 10),
     CNOT(2, 10),
-    
-    #Parity bit flip block 1
+
+    # Parity bit flip block 1
     CNOT(3, 11),
     CNOT(4, 11),
     CNOT(4, 12),
     CNOT(5, 12),
-    
-    #Parity bit flip block 2
+
+    # Parity bit flip block 2
     CNOT(6, 13),
     CNOT(7, 13),
     CNOT(7, 14),
     CNOT(8, 14),
-    
+
     #Decoding and correcting
     CNOT(0, 1),
     CNOT(3, 4),
@@ -306,21 +306,19 @@ shor_code_wiki = Program(
     CNOT(0, 3),
     CNOT(0, 6),
     CCNOT(6, 3, 0),
-    
-    #Parity bit Phase flip
+
+    # Parity bit Phase flip
     CNOT(0, 15),
     CNOT(3, 15),
     CNOT(3, 16),
-    CNOT(6, 16),   
+    CNOT(6, 16),
 )
 
-result = qvm.run_and_measure(shor_code_wiki, [9,10, 15,16], 5)
+result = qvm.run_and_measure(shor_code_wiki, [9, 10, 15, 16], 5)
 #print("Shor Code Wiki %s" % result)
 
 
-
-
-z_correction = Program(    
+z_correction = Program(
 
     H(0),
     H(1),
@@ -330,22 +328,22 @@ z_correction = Program(
     H(5),
     H(6),
     H(7),
-    H(8),    
+    H(8),
     CNOT(0, 9),
     CNOT(1, 9),
     CNOT(2, 9),
     CNOT(3, 9),
     CNOT(3, 9),
     CNOT(0, 5),
-   
-)   
+
+)
 
 
-result = qvm.run_and_measure(z_correction, [3,4], 10)
+result = qvm.run_and_measure(z_correction, [3, 4], 10)
 #print("Shor %s" % result)
 
 
-steane_code = Program(    
+steane_code = Program(
 
     H(6),
     H(7),
@@ -354,16 +352,16 @@ steane_code = Program(
     H(10),
     H(11),
     H(12),
-    
+
     CNOT(6, 0),
-    
+
     CNOT(7, 1),
-    
+
     CNOT(8, 2),
-    
+
     CNOT(9, 2),
     CNOT(9, 1),
-    
+
     CNOT(10, 2),
     CNOT(10, 0),
 
@@ -403,13 +401,14 @@ steane_code = Program(
     CNOT(12, 4),
     CNOT(12, 3),
 
-    
-   
-)   
 
 
-result = qvm.run_and_measure(steane_code, [0,1,2,3,4,5], 1)
+)
+
+
+result = qvm.run_and_measure(steane_code, [0, 1, 2, 3, 4, 5], 1)
 print("Steane %s" % result)
+
 
 def damping_channel(damp_prob=.1):
     """
@@ -426,6 +425,7 @@ def damping_channel(damp_prob=.1):
     residual_kraus = np.diag([1, np.sqrt(1-damp_prob)])
     return [residual_kraus, damping_op]
 
+
 def append_damping_to_gate(gate, damp_prob=.1):
     """
     Generate the Kraus operators corresponding to a given unitary
@@ -437,6 +437,8 @@ def append_damping_to_gate(gate, damp_prob=.1):
     :rtype: list
     """
     return append_kraus_to_gate(damping_channel(damp_prob), gate)
+
+
 num_I = 10
 
 
@@ -451,61 +453,61 @@ def append_kraus_to_gate(kraus_ops, g):
     return [kj.dot(g) for kj in kraus_ops]
 
 
-
 def get_compiled_prog(theta):
     return Program([
         RZ(-pi/2, 0),
         RX(-pi/2, 0),
         RZ(-pi/2, 1),
-        RX( pi/2, 1),
+        RX(pi/2, 1),
         CZ(1, 0),
         RZ(-pi/2, 1),
         RX(-pi/2, 1),
         RZ(theta, 1),
-        RX( pi/2, 1),
+        RX(pi/2, 1),
         CZ(1, 0),
-        RX( pi/2, 0),
-        RZ( pi/2, 0),
+        RX(pi/2, 0),
+        RZ(pi/2, 0),
         RZ(-pi/2, 1),
-        RX( pi/2, 1),
+        RX(pi/2, 1),
         RZ(-pi/2, 1),
     ])
 
 
-def H(qubit):    
-   return 1
-    
-    
+def H(qubit):
+    return 1
+
+
 def get_compiled_prog_1():
     return Program([
-        RX(pi/2, 0), 
+        RX(pi/2, 0),
         I(0),
         RZ(-pi/2, 0),
 
-        RX(-pi/2, 0), 
+        RX(-pi/2, 0),
         I(0),
         RZ(pi/2, 0),
     ])
 
+
 p = Program()
 p.inst(X(0))
 # want increasing number of I-gates
-p.define_noisy_gate("II", [0], append_damping_to_gate(np.eye(2), damping_per_I))
+p.define_noisy_gate(
+    "II", [0], append_damping_to_gate(np.eye(2), damping_per_I))
 p.inst([I(0) for _ in range(num_I)])
-#p.inst(H(0))
+# p.inst(H(0))
 p.inst(MEASURE(0, [0]))
 #print("Expected 1 %s" % qvm.run(p, [0]))
 
 thetas = np.linspace(-pi, pi, num=20)
 t1s = np.logspace(-6, -5, num=3)
 
-#print(t1s[0])
+# print(t1s[0])
 
 prog = get_compiled_prog(pi/2)
 noisy = add_noise_to_program(prog, T1=t1s[0]).inst([
-            MEASURE(0, 0),
-        ])
+    MEASURE(0, 0),
+])
 result = np.array(qvm.run(noisy, [0], 1))
 
-#print(result)
-
+# print(result)
